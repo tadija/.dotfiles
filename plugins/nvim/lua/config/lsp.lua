@@ -15,6 +15,7 @@ end, {})
 
 local M = {}
 
+-- keymaps
 M.on_attach = function(_, bufnr)
   local map = function(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
@@ -29,6 +30,7 @@ M.on_attach = function(_, bufnr)
   map("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic")
 end
 
+-- capabilities
 M.capabilities = vim.tbl_deep_extend(
   "force",
   {},

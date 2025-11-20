@@ -1,23 +1,13 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 
+local wk = require("which-key")
 local map = vim.keymap.set
-
--- comment line / selection
-map("n", "<leader>k", "gcc", { desc = "Toggle Comment", remap = true })
-map("v", "<leader>k", "gc", { desc = "Toggle Comment", remap = true })
-
--- define group for codecompanion keymaps
-require("which-key").add({ { "<leader>a", group = "ai" }, })
 
 -- extend built-in "file" keymap
 map("n", "<leader>fa", "ggVG", { desc = "Select all" })
 map("n", "<leader>fi", "gg=G", { desc = "Indent all" })
 map("n", "<leader>fy", ":%y+<CR>", { desc = "Yank all" })
-map("n", "<leader>fs", function()
-  vim.cmd("silent write")
-  vim.notify("Saved ✔", "info", { title = "File" })
-end, { desc = "Save file" })
 
 -- extend built-in "search" keymap
 map("n", "<leader>sk", function()
@@ -30,10 +20,31 @@ map("n", "<C-M-l>", "<Cmd>vertical resize +2<CR>", { desc = "Resize right" })
 map("n", "<C-M-j>", "<Cmd>resize +2<CR>", { desc = "Resize down" })
 map("n", "<C-M-k>", "<Cmd>resize -2<CR>", { desc = "Resize up" })
 
--- load task keymaps (wip)
-local tasks = require("config.tasks")
-require("which-key").add({ { "<leader>t", group = "tasks" }, })
-map("n", "<leader>tl", "<cmd>TaskLint<CR>",   { desc = "Lint" })
-map("n", "<leader>tf", "<cmd>TaskFormat<CR>", { desc = "Format" })
-map("n", "<leader>tb", "<cmd>TaskBuild<CR>",  { desc = "Build" })
-map("n", "<leader>tt", "<cmd>TaskTest<CR>",   { desc = "Test" })
+-- my
+wk.add({
+  { "<leader>m", group = "my", mode = { "n", "v" } },
+  map("n", "<leader>mk", "gcc", { desc = "Toggle Comment", remap = true }),
+  map("v", "<leader>mk", "gc", { desc = "Toggle Comment", remap = true }),
+  map("n", "<leader>ms", "<cmd>wall<cr>", { desc = "Save all files" }),
+  map("n", "<leader>mq", "<cmd>wqa<cr>", { desc = "Save all and quit" }),
+})
+
+-- languages
+vim.keymap.del("n", "<leader>l")
+vim.keymap.del("n", "<leader>L")
+wk.add({
+  { "<leader>l", group = "langs", mode = { "n", "v" } },
+  map("n", "<leader>ll", "<cmd>LangTaskLint<CR>", { desc = "Lint" }),
+  map("n", "<leader>lf", "<cmd>LangTaskFormat<CR>", { desc = "Format" }),
+  map("n", "<leader>lb", "<cmd>LangTaskBuild<CR>", { desc = "Build" }),
+  map("n", "<leader>lt", "<cmd>LangTaskTest<CR>", { desc = "Test" }),
+})
+
+-- codecompanion
+wk.add({
+  { "<leader>a", group = "ai", mode = { "n", "v" } },
+  map({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionActions<cr>", { desc = "Actions" }),
+  map({ "n", "v" }, "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Chat" }),
+  map({ "n", "v" }, "<leader>ap", "<cmd>CodeCompanion<cr>", { desc = "Prompt" }),
+  map("v", "<leader>a2", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add 2 Chat" }),
+})
