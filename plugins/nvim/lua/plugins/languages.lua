@@ -114,7 +114,6 @@ M.linters_by_ft = {
   scala = { "scalac" },
   sql = { "sqlfluff" },
   swift = { "swiftlint" },
-  toml = { "taplo" },
   typescript = { "eslint_d", "eslint" },
   vue = { "eslint_d", "eslint" },
   xml = { "xmllint" },
@@ -509,6 +508,7 @@ return {
   -- conform.nvim
   {
     "stevearc/conform.nvim",
+    version = false,
     event = "BufWritePre",
     opts = function(_, opts)
       opts.formatters_by_ft = vim.tbl_extend("force", opts.formatters_by_ft or {}, M.formatters_by_ft)
@@ -519,6 +519,7 @@ return {
   -- nvim-lint
   {
     "mfussenegger/nvim-lint",
+    version = false,
     event = { "BufWritePost", "InsertLeave" },
     opts = function(_, opts)
       opts.linters_by_ft = vim.tbl_extend("force", opts.linters_by_ft or {}, M.linters_by_ft)
@@ -529,6 +530,7 @@ return {
   -- nvim-lspconfig
   {
     "neovim/nvim-lspconfig",
+    version = false,
     opts = function(_, opts)
       opts.servers = opts.servers or {}
       for s, c in pairs(M.servers) do
@@ -554,6 +556,7 @@ return {
   -- nvim-treesitter
   {
     "nvim-treesitter/nvim-treesitter",
+    version = false,
     build = ":TSUpdate",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}

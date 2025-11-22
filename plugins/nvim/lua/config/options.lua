@@ -6,4 +6,5 @@ vim.opt.fileformats = { "unix", "dos" }
 vim.opt.fileformat = "unix"
 vim.opt.fixendofline = true
 vim.opt.endofline = true
+vim.opt.guicursor:append("a:blinkon0")
 vim.opt.relativenumber = false

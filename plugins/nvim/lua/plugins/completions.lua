@@ -4,8 +4,8 @@ local cmp = require('blink.cmp')
 
 return {
   'saghen/blink.cmp',
+  version = false,
   dependencies = { 'rafamadriz/friendly-snippets' },
-  version = '1.*',
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {

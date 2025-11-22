@@ -1,37 +1,42 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 
+local snacks = require("snacks")
 local wk = require("which-key")
 local map = vim.keymap.set
 
--- extend built-in "file" keymap
-map("n", "<leader>fa", "ggVG", { desc = "Select all" })
-map("n", "<leader>fi", "gg=G", { desc = "Indent all" })
-map("n", "<leader>fy", ":%y+<CR>", { desc = "Yank all" })
-
 -- extend built-in "search" keymap
 map("n", "<leader>sk", function()
-  require("snacks").picker.keymaps()
+  snacks.picker.keymaps()
 end, { desc = "[S]earch [K]eymaps" })
 
--- resize panes in all directions
-map("n", "<C-M-h>", "<Cmd>vertical resize -2<CR>", { desc = "Resize left" })
-map("n", "<C-M-l>", "<Cmd>vertical resize +2<CR>", { desc = "Resize right" })
-map("n", "<C-M-j>", "<Cmd>resize +2<CR>", { desc = "Resize down" })
-map("n", "<C-M-k>", "<Cmd>resize -2<CR>", { desc = "Resize up" })
-
--- my
+-- my custom shortcuts
 wk.add({
   { "<leader>m", group = "my", mode = { "n", "v" } },
+  map("n", "<leader>ma", "ggVG", { desc = "Select all" }),
+  map("n", "<leader>mi", "gg=G", { desc = "Indent all" }),
+  map("n", "<leader>my", ":%y+<CR>", { desc = "Yank all" }),
   map("n", "<leader>mk", "gcc", { desc = "Toggle Comment", remap = true }),
   map("v", "<leader>mk", "gc", { desc = "Toggle Comment", remap = true }),
-  map("n", "<leader>ms", "<cmd>wall<cr>", { desc = "Save all files" }),
-  map("n", "<leader>mq", "<cmd>wqa<cr>", { desc = "Save all and quit" }),
+  map("v", "<leader>mf", vim.lsp.buf.format, { desc = "Format selection" }),
+  map("n", "<leader>mr", vim.lsp.buf.rename, { desc = "Rename Symbol" }),
+  map("n", "<leader>mq", "<cmd>silent! wa | silent! qa!<CR>", { desc = "Save All + Quit" }),
 })
 
--- languages
-vim.keymap.del("n", "<leader>l")
-vim.keymap.del("n", "<leader>L")
+-- resize splits in all directions
+map("n", "<C-A-l>", "<Cmd>vertical resize +2<CR>", { desc = "Increase Width" })
+map("n", "<C-A-h>", "<Cmd>vertical resize -2<CR>", { desc = "Decrease Width" })
+map("n", "<C-A-j>", "<Cmd>resize +2<CR>", { desc = "Increase Height" })
+map("n", "<C-A-k>", "<Cmd>resize -2<CR>", { desc = "Decrease Height" })
+
+-- terminals
+local term = snacks.terminal
+map({ "n", "t" }, "<M-1>", function() term.toggle(nil, { cwd = vim.fn.expand("~"), win = { position = "top" } }) end, { desc = " Terminal (Global)" })
+map({ "n", "t" }, "<M-2>", function() term.toggle(nil, { cwd = vim.loop.cwd(), win = { position = "float" } }) end, { desc = "Terminal (Project)" })
+
+-- plugins/languages
+vim.keymap.del("n", "<leader>l") -- Lazy
+vim.keymap.del("n", "<leader>L") -- LazyVim Changelog
 wk.add({
   { "<leader>l", group = "langs", mode = { "n", "v" } },
   map("n", "<leader>ll", "<cmd>LangTaskLint<CR>", { desc = "Lint" }),
@@ -40,11 +45,13 @@ wk.add({
   map("n", "<leader>lt", "<cmd>LangTaskTest<CR>", { desc = "Test" }),
 })
 
--- codecompanion
+-- plugins/ai
 wk.add({
   { "<leader>a", group = "ai", mode = { "n", "v" } },
-  map({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionActions<cr>", { desc = "Actions" }),
-  map({ "n", "v" }, "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Chat" }),
-  map({ "n", "v" }, "<leader>ap", "<cmd>CodeCompanion<cr>", { desc = "Prompt" }),
-  map("v", "<leader>a2", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add 2 Chat" }),
+  map("n", "<leader>ap", "<cmd>CodeCompanion<CR>", { desc = "Prompt" }),
+  map("n", "<leader>ac", "<cmd>CodeCompanionChat Toggle<CR>", { desc = "Chat" }),
+  map({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionActions<CR>", { desc = "Actions" }),
+  map({ "n", "v" }, "<leader>av", function() require("codecompanion").prompt("vibe") end, { desc = "Vibe Code" }),
+  map("v", "<leader>a2", "<cmd>CodeCompanionChat Add<CR>", { desc = "Add 2 Chat" }),
+  map("x", "<leader>ap", ":'<,'>CodeCompanion ", { desc = "Prompt (selection)" }),
 })

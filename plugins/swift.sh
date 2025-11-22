@@ -10,3 +10,7 @@ alias spiexe="swift package init --type executable"
 alias spu="swift package update"
 alias spx="swift package generate-xcodeproj"
 alias spm="swift package manager"
+
+if [ -f "$HOME/.local/share/swiftly/env.sh" ]; then
+  . "$HOME/.local/share/swiftly/env.sh"
+fi

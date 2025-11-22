@@ -2,12 +2,14 @@ return {
   -- code comments
   {
     'numToStr/Comment.nvim',
+    version = false,
     opts = {}
   },
 
   -- code diagnostics
   {
     "neovim/nvim-lspconfig",
+    version = false,
     opts = function(_, opts)
       -- run default setup first
       vim.diagnostic.config(opts.diagnostics)
@@ -17,6 +19,19 @@ return {
       vim.schedule(function()
         vim.diagnostic.enable(false)
       end)
+    end,
+  },
+
+  -- inline diff
+  {
+    "nvim-mini/mini.diff",
+    version = false,
+    config = function()
+      local diff = require("mini.diff")
+      diff.setup({
+        -- disabled by default
+        source = diff.gen_source.none(),
+      })
     end,
   },
 
@@ -37,6 +52,7 @@ return {
   -- multi-line formatting
   {
     'wansmer/treesj',
+    version = false,
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     keys = {
       { "gS", function() require("treesj").split() end, desc = "Split lines" },
@@ -49,7 +65,7 @@ return {
   {
     {
       "mg979/vim-visual-multi",
-      branch = "master",
+      version = false,
       init = function()
         vim.g.VM_leader = "\\"
         vim.g.VM_theme = "codedark"
@@ -62,4 +78,14 @@ return {
     },
   },
 
+  -- which-key
+  {
+    "folke/which-key.nvim",
+    version = false,
+    opts = {
+      icons = {
+        group = " + ",
+      },
+    },
+  },
 }
