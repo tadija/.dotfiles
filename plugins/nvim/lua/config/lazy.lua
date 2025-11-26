@@ -21,9 +21,11 @@ require("lazy").setup({
 
     -- LazyVim Extras
     {
-      { import = "lazyvim.plugins.extras.ai.copilot" },
       { import = "lazyvim.plugins.extras.coding.yanky" },
       { import = "lazyvim.plugins.extras.editor.inc-rename" },
+      { import = "lazyvim.plugins.extras.ui.treesitter-context" },
+      { import = "lazyvim.plugins.extras.util.dot" },
+
       { import = "lazyvim.plugins.extras.lang.docker" },
       { import = "lazyvim.plugins.extras.lang.dotnet" },
       { import = "lazyvim.plugins.extras.lang.git" },
@@ -40,8 +42,6 @@ require("lazy").setup({
       { import = "lazyvim.plugins.extras.lang.typescript" },
       { import = "lazyvim.plugins.extras.lang.vue" },
       { import = "lazyvim.plugins.extras.lang.yaml" },
-      { import = "lazyvim.plugins.extras.ui.treesitter-context" },
-      { import = "lazyvim.plugins.extras.util.dot" },
     },
 
     -- LazyVim Custom Plugins

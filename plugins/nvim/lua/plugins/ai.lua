@@ -32,6 +32,7 @@ return {
       opts = {
         log_level = "DEBUG",
       },
+      prompt_library = require("config.prompts"),
       strategies = {
         chat = {
           adapter = "codex",
@@ -67,28 +68,6 @@ return {
         },
         inline = {
           adapter = "gemini",
-        },
-      },
-      prompt_library = {
-        ["Vibe Code"] = {
-          strategy = "inline",
-          description = "Rewrite code with clean modern vibes",
-          opts = {
-            short_name = "vibe",
-            is_slash_cmd = true,
-            auto_submit = true,
-            modes = { "n", "v" },
-          },
-          prompts = {
-            {
-              role = "user",
-              content = [[
-If no code is selected (or the trimmed selection is empty), generate a short snippet in the context of the current buffer. 
-Otherwise, rewrite or refactor the selected code (with focus on the selected code only) in a clean, elegant, modern style. 
-Improve naming, structure, readability, and flow - all while preserving the original intended behaviour. Output code only.
-              ]],
-            },
-          },
         },
       },
     },

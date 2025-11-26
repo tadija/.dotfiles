@@ -85,7 +85,7 @@ M.formatters_by_ft = {
   toml = { "taplo" },
   typescript = { "prettierd", "prettier" },
   vue = { "prettierd", "prettier" },
-  xml = { "xmllint" },
+  xml = { "xmlformatter" },
   yaml = { "prettierd", "prettier" },
   zig = { "zigfmt" },
 }
@@ -116,7 +116,6 @@ M.linters_by_ft = {
   swift = { "swiftlint" },
   typescript = { "eslint_d", "eslint" },
   vue = { "eslint_d", "eslint" },
-  xml = { "xmllint" },
   yaml = { "yamllint" },
   zig = { "zig" },
 }
@@ -140,10 +139,9 @@ M.servers = {
 
   -- C# / .NET
   omnisharp = {
-    cmd = { "omnisharp" },
+    cmd = { "OmniSharp" },
     root_dir = util.root_pattern("*.sln", "*.csproj", ".git"),
     enable_roslyn_analyzers = true,
-    organize_imports_on_format = true,
     enable_import_completion = true,
     settings = {
       FormattingOptions = {
@@ -254,27 +252,14 @@ M.servers = {
 
   vue_ls = false,
 
-  -- HTML / CSS / JSON / Markdown / TOML / YAML
+  -- HTML / CSS / JSON / Markdown / TOML / XML / YAML
   html = {},
   cssls = {},
   jsonls = {},
+  lemminx = {},
   marksman = {},
   taplo = {},
   yamlls = {},
-
-  -- XML
-  lemminx = {
-    filetypes = { "xml", "xsd", "xsl", "xslt", "svg" },
-    root_dir = util.root_pattern("*.xml", "*.svg", ".git"),
-    settings = {
-      xml = {
-        format = {
-          splitAttributes = true,
-          spaceBeforeEmptyCloseTag = true,
-        },
-      },
-    },
-  },
 }
 
 -- Build / Test helpers -------------------------------------------------------
@@ -520,7 +505,7 @@ return {
   {
     "mfussenegger/nvim-lint",
     version = false,
-    event = { "BufWritePost", "InsertLeave" },
+    event = "BufWritePost",
     opts = function(_, opts)
       opts.linters_by_ft = vim.tbl_extend("force", opts.linters_by_ft or {}, M.linters_by_ft)
       return opts
@@ -533,6 +518,8 @@ return {
     version = false,
     opts = function(_, opts)
       opts.servers = opts.servers or {}
+      opts.inlay_hints = opts.inlay_hints or {}
+      opts.inlay_hints.enabled = false
       for s, c in pairs(M.servers) do
         opts.servers[s] = c
       end
@@ -541,9 +528,6 @@ return {
           local lsp = require("config.lsp")
           opts.on_attach = function(client, bufnr)
             lsp.on_attach(client, bufnr)
-            if client.server_capabilities.inlayHintProvider then
-              vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-            end
           end
           opts.capabilities = lsp.capabilities
           require("lspconfig")[server].setup(opts)

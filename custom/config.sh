@@ -6,6 +6,7 @@ path=(
   $HOME/.local/bin
   /opt/homebrew/bin
   /opt/homebrew/sbin
+  /opt/mssql-tools18/bin
   /usr/local/bin
   /snap/bin
   $path

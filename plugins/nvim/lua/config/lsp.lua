@@ -6,7 +6,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     if not client then return end
     local root = client.config.root_dir or vim.loop.cwd()
     vim.b.lsp_root = root
-    vim.lsp.inlay_hint.enable(false)
   end,
 })
 
