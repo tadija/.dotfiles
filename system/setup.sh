@@ -1,4 +1,4 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # setup.sh
 
 ### - helpers
@@ -53,4 +53,4 @@ print "Loading $shellFile:"
 source "$HOME/$shellFile"
 echo "" && print "Finished loading $shellFile"
 
-print "See more: https://github.com/tadija/AEDotFiles"
+print "See more: https://github.com/tadija/.dotfiles"

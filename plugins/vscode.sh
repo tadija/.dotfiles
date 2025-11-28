@@ -1,4 +1,4 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # vscode.sh
 
 # https://github.com/microsoft/vscode-remote-release/issues/1688#issuecomment-1708577380

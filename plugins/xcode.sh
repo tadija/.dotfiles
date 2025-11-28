@@ -1,4 +1,4 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # xcode.sh
 
 alias xcopen="xcfile() { local workspace=\$(find *.xcworkspace 2>/dev/null | head -1); local project=\$(find *.xcodeproj 2>/dev/null | head -1); \${workspace:-\${project}} ; }; open -a Xcode \"${xcfile}\""

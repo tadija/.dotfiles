@@ -1,4 +1,4 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # my.sh
 
 # random shortcuts
@@ -28,7 +28,7 @@ function my-radio() {
 }
 
 function my-dotfiles() {
-  ln -s ~/Developer/GitHub/AEDotFiles ~/.dotfiles
+  ln -s ~/Developer/GitHub/.dotfiles ~/.dotfiles
   la ~/.dotfiles
 }
 

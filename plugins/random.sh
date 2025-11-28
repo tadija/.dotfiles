@@ -1,4 +1,4 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # random.sh
 
 alias checkperm="stat -f '%OLp'"
