@@ -50,8 +50,6 @@ xcuserdata/
 
 ## Objective-C / Swift
 
-## Specific
-
 *.hmap
 *.ipa
 *.dSYM.zip
@@ -92,3 +90,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
+
+## Custom
+
+.env.local
+*.local

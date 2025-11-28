@@ -10,6 +10,8 @@ function setup-rbenv() {
   rbenv rehash
 }
 
+export PATH="$HOME/.rbenv/shims:$PATH"
+
 if [ -x "$(command -v rbenv)" ]; then
   eval "$(rbenv init -)"
 fi

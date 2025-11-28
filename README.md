@@ -1,4 +1,4 @@
-# AEDotFiles
+# .dotfiles
 
 **From vanilla to personalized macOS in less then 30 minutes**
 
@@ -11,7 +11,7 @@ Install and run Xcode then start Terminal app and follow instructions:
 - Clone this repo into your home directory
 
 	``` sh
-	$ git clone https://github.com/tadija/AEDotFiles.git ~/.dotfiles
+	$ git clone https://github.com/tadija/.dotfiles.git ~/.dotfiles
 	```
 
 - Run this [setup script](system/setup.sh) which will make your new [.shell_file](.shell_file)

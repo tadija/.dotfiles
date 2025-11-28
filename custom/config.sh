@@ -1,11 +1,16 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # config.sh
 
-export PATH=$PATH:$HOME/bin
-export PATH=$PATH:$HOME/.local/bin
-export PATH=$PATH:/usr/local/bin
-export PATH=$PATH:/opt/homebrew/bin
-export PATH=$PATH:/snap/bin
+path=(
+  $HOME/bin
+  $HOME/.local/bin
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  /opt/mssql-tools18/bin
+  /usr/local/bin
+  /snap/bin
+  $path
+)
 
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
@@ -88,6 +93,7 @@ cli=(
   hub # https://hub.github.com
   jq # https://stedolan.github.io/jq
   lazygit # https://github.com/jesseduffield/lazygit
+  luarocks # https://luarocks.org
   mas # https://github.com/mas-cli/mas
   mise # https://mise.jdx.dev
   mysql # https://dev.mysql.com

@@ -1,11 +1,10 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # general.sh
+
+alias ..="cd .."
 
 alias update="brew update && brew upgrade && brew cleanup && mas upgrade"
 alias restore='pgrep -vxq tmux && tmux new -d -s delete-me && tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh && tmux kill-session -t delete-me && tmux attach || tmux attach'
-
-alias cdh="cd $HOME"
-alias ..="cd .."
 
 case $OSTYPE in
   linux) alias ls='ls --color';;

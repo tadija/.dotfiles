@@ -1,4 +1,4 @@
-# https://github.com/tadija/AEDotFiles
+# https://github.com/tadija/.dotfiles
 # swift.sh
 
 alias sb="swift build"
@@ -10,3 +10,7 @@ alias spiexe="swift package init --type executable"
 alias spu="swift package update"
 alias spx="swift package generate-xcodeproj"
 alias spm="swift package manager"
+
+if [ -f "$HOME/.local/share/swiftly/env.sh" ]; then
+  . "$HOME/.local/share/swiftly/env.sh"
+fi
