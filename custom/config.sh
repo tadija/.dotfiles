@@ -20,9 +20,9 @@ export LESS='-R --use-color --hilite-search --incsearch --ignore-case --no-init 
 export PAGER='less'
 
 export MANPAGER='less'
-export LESS_TERMCAP_md=$'\e[1;36m'      # bold -> cyan
-export LESS_TERMCAP_us=$'\e[1;32m'      # underline -> green
-export LESS_TERMCAP_so=$'\e[1;44;33m'   # standout -> yellow on blue
+export LESS_TERMCAP_md=$'\e[1;36m'
+export LESS_TERMCAP_us=$'\e[1;32m'
+export LESS_TERMCAP_so=$'\e[1;44;93m'
 
 # Git User
 # plugins/git-user.sh

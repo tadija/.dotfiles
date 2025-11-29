@@ -32,7 +32,7 @@ return {
       opts = {
         log_level = "DEBUG",
       },
-      prompt_library = require("config.prompts"),
+      prompt_library = require("plugins.ai.prompts"),
       strategies = {
         chat = {
           adapter = "codex",
