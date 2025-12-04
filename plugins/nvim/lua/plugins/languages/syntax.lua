@@ -76,7 +76,7 @@ M.formatters_by_ft = {
   ruby = { "rubocop" },
   rust = { "rustfmt" },
   sql = { "sqlfluff", "sqlfmt" },
-  -- swift = { "swiftformat" },
+  swift = { "swiftformat" },
   toml = { "taplo" },
   typescript = { "prettierd", "prettier" },
   vue = { "prettierd", "prettier" },
@@ -110,13 +110,6 @@ M.linters_by_ft = {
 }
 
 -- Mason packages --------------------------------------------------------------
-local function collect_tools(map, add)
-  for _, tools in pairs(map) do
-    for _, tool in ipairs(tools) do
-      add(tool)
-    end
-  end
-end
 
 local mason_extra = {
   "astro-language-server",
@@ -141,7 +134,6 @@ local mason_extra = {
   "pyright",
   "rust-analyzer",
   "solargraph",
-  -- "sourcekit",
   "sqls",
   "tailwindcss-language-server",
   "taplo",
@@ -152,8 +144,21 @@ local mason_extra = {
 }
 
 M.mason_packages = {}
+
 do
-  local added = {}
+  local added = {
+    -- mason n/a (install manually)
+    swiftformat = true
+  }
+
+  local function collect_tools(map, add)
+    for _, tools in pairs(map) do
+      for _, tool in ipairs(tools) do
+        add(tool)
+      end
+    end
+  end
+  
   local function add(tool)
     if tool and not added[tool] then
       table.insert(M.mason_packages, tool)
@@ -232,3 +237,4 @@ function M.get_specs()
 end
 
 return M
+

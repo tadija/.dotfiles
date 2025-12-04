@@ -33,10 +33,10 @@ local function lsp_spec()
   }
 end
 
-local specs = {
-  lsp_spec(),
-}
-
+local specs = { lsp_spec() }
 vim.list_extend(specs, syntax.get_specs())
 
-return specs
+return {
+  specs,
+}
+
