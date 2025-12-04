@@ -59,6 +59,8 @@ M.ensure_installed = {
 M.formatters_by_ft = {
   astro = { "prettierd", "prettier" },
   bash = { "shfmt" },
+  c = { "clang-format" },
+  cpp = { "clang-format" },
   cs = { "csharpier" },
   css = { "prettierd", "prettier", "stylelint" },
   fsharp = { "fantomas" },
@@ -76,7 +78,7 @@ M.formatters_by_ft = {
   ruby = { "rubocop" },
   rust = { "rustfmt" },
   sql = { "sqlfluff", "sqlfmt" },
-  -- swift = { "swiftformat" },
+  swift = { "swiftformat" },
   toml = { "taplo" },
   typescript = { "prettierd", "prettier" },
   vue = { "prettierd", "prettier" },
@@ -88,6 +90,8 @@ M.formatters_by_ft = {
 M.linters_by_ft = {
   astro = { "eslint_d", "eslint" },
   bash = { "shellcheck" },
+  c = { "cpplint" },
+  cpp = { "cpplint" },
   css = { "stylelint" },
   fortran = { "fortls" },
   go = { "golangci-lint" },
@@ -110,13 +114,6 @@ M.linters_by_ft = {
 }
 
 -- Mason packages --------------------------------------------------------------
-local function collect_tools(map, add)
-  for _, tools in pairs(map) do
-    for _, tool in ipairs(tools) do
-      add(tool)
-    end
-  end
-end
 
 local mason_extra = {
   "astro-language-server",
@@ -141,7 +138,7 @@ local mason_extra = {
   "pyright",
   "rust-analyzer",
   "solargraph",
-  -- "sourcekit",
+  "sourcekit",
   "sqls",
   "tailwindcss-language-server",
   "taplo",
@@ -152,8 +149,22 @@ local mason_extra = {
 }
 
 M.mason_packages = {}
+
 do
-  local added = {}
+  local added = {
+    -- mason n/a (install manually)
+    sourcekit = true,
+    swiftformat = true,
+  }
+
+  local function collect_tools(map, add)
+    for _, tools in pairs(map) do
+      for _, tool in ipairs(tools) do
+        add(tool)
+      end
+    end
+  end
+  
   local function add(tool)
     if tool and not added[tool] then
       table.insert(M.mason_packages, tool)
@@ -232,3 +243,4 @@ function M.get_specs()
 end
 
 return M
+

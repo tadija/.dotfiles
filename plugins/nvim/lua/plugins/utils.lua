@@ -22,6 +22,19 @@ return {
     end,
   },
 
+  -- file explorer
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+    lazy = false,
+    init = function()
+      require("oil").setup()
+    end,
+  },
+
   -- inline diff
   {
     "nvim-mini/mini.diff",
@@ -63,19 +76,17 @@ return {
 
   -- multi-cursors
   {
-    {
-      "mg979/vim-visual-multi",
-      version = false,
-      init = function()
-        vim.g.VM_leader = "\\"
-        vim.g.VM_theme = "codedark"
-        vim.g.VM_maps = {
-          ["Find Under"] = "<C-n>",
-          ["Find Subword Under"] = "<C-n>",
-          ["Select All"] = "<C-A-n>",
-        }
-      end,
-    },
+    "mg979/vim-visual-multi",
+    version = false,
+    init = function()
+      vim.g.VM_leader = "\\"
+      vim.g.VM_theme = "codedark"
+      vim.g.VM_maps = {
+        ["Find Under"] = "<C-n>",
+        ["Find Subword Under"] = "<C-n>",
+        ["Select All"] = "<C-A-n>",
+      }
+    end,
   },
 
   -- which-key
@@ -88,4 +99,18 @@ return {
       },
     },
   },
+
+  -- xtras 
+  {
+    "eandrju/cellular-automaton.nvim",
+    version = false,
+    cmd = "CellularAutomaton",
+    keys = {
+      { "<leader>mxl", "<cmd>CellularAutomaton game_of_life<cr>", desc = "Game of Life" },
+      { "<leader>mxr", "<cmd>CellularAutomaton make_it_rain<cr>", desc = "Make it rain" },
+      { "<leader>mxs", "<cmd>CellularAutomaton scramble<cr>", desc = "Scramble Text" },
+    },
+  },
+
 }
+

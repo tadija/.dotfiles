@@ -32,4 +32,39 @@ return {
       end,
     },
   },
+
+  -- persist colorscheme per project
+  {
+    "nvim-lua/plenary.nvim",
+    lazy = false,
+
+    config = function()
+      local util = require("lazyvim.util")
+      local root = util.root.get()
+      local dir = root .. "/.nvim"
+      local file = dir .. "/colorscheme"
+
+      -- load
+      if vim.fn.filereadable(file) == 1 then
+        local cs = vim.fn.readfile(file)[1]
+        if cs and #cs > 0 then
+          vim.cmd("colorscheme " .. cs)
+        end
+      end
+
+      -- save
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        callback = function()
+          local name = vim.g.colors_name
+          if name and #name > 0 then
+            if vim.fn.isdirectory(dir) == 0 then
+              vim.fn.mkdir(dir, "p")
+            end
+            vim.fn.writefile({ name }, file)
+          end
+        end,
+      })
+    end,
+  },
 }
+
