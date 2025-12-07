@@ -12,11 +12,13 @@ path=(
   $path
 )
 
-export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
+export TERM='xterm-256color'
+export COLORTERM='truecolor'
 export EDITOR='nvim'
-export LESS='-R --use-color --hilite-search --incsearch --ignore-case --no-init --LONG-PROMPT --quit-if-one-screen'
+export LESS='-RXMF'
 export PAGER='less'
 
 export MANPAGER='less'
@@ -99,6 +101,7 @@ cli=(
   mysql # https://dev.mysql.com
   npm # https://www.npmjs.com
   nvim # https://neovim.io
+  pipx # https://pipx.pypa.io
   ranger # https://github.com/ranger/ranger
   rbenv # https://github.com/rbenv/rbenv
   ripgrep # https://github.com/BurntSushi/ripgrep
@@ -115,6 +118,7 @@ cli=(
   wget # https://www.gnu.org/software/wget
   xcbeautify # https://github.com/cpisciotta/xcbeautify
   xcode-build-server # https://github.com/SolaWing/xcode-build-server
+  xcp # https://github.com/wojciech-kulik/XcodeProjectCLI
   zsh-autosuggestions # https://github.com/zsh-users/zsh-autosuggestions
   zsh-syntax-highlighting # https://github.com/zsh-users/zsh-syntax-highlighting
 )
@@ -146,3 +150,4 @@ apps=(
   zoom
   zed
 )
+

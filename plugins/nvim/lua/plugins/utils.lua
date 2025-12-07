@@ -106,9 +106,9 @@ return {
     version = false,
     cmd = "CellularAutomaton",
     keys = {
-      { "<leader>mxl", "<cmd>CellularAutomaton game_of_life<cr>", desc = "Game of Life" },
-      { "<leader>mxr", "<cmd>CellularAutomaton make_it_rain<cr>", desc = "Make it rain" },
-      { "<leader>mxs", "<cmd>CellularAutomaton scramble<cr>", desc = "Scramble Text" },
+      { "<leader>mel", "<cmd>CellularAutomaton game_of_life<cr>", desc = "Game of Life" },
+      { "<leader>mer", "<cmd>CellularAutomaton make_it_rain<cr>", desc = "Make it rain" },
+      { "<leader>mes", "<cmd>CellularAutomaton scramble<cr>", desc = "Scramble Text" },
     },
   },
 
