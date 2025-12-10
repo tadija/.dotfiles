@@ -13,6 +13,10 @@ local function lsp_spec()
   return {
     "neovim/nvim-lspconfig",
     version = false,
+    init = function()
+      -- disable on startup
+      vim.diagnostic.enable(false)
+    end,
     opts = function(_, opts)
       opts.servers = opts.servers or {}
       opts.inlay_hints = opts.inlay_hints or {}

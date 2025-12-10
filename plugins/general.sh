@@ -11,10 +11,17 @@ case $OSTYPE in
   darwin) alias ls='ls -GFh';;
   *) ;;
 esac
-alias ll="ls -lo"
-alias la="ll -a"
+
+alias la="eza -lah --group-directories-first"
+alias ll="la --icons"
+alias lt="eza -T --git --icons --level=3"
+alias lz="eza -l --total-size --sort=size --reverse"
+alias lm="eza -l --sort=modified --reverse"
+alias lsd="eza -D --group-directories-first --icons"
 
 alias grep="grep --color=auto"
+alias ht="htop -t"
+alias hme='htop -u "$USER"'
 alias o="open ."
 alias rmd="rm -rf"
 
@@ -25,3 +32,10 @@ alias lock='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resour
 alias off="pmset sleepnow"
 
 alias paths="echo $PATH | sed 's/:/\n/g' | sort | uniq -c"
+
+gt() {
+  local dir
+  dir="$(eza -D | fzf --preview-window=right:0%)" || return
+  cd "$dir"
+}
+

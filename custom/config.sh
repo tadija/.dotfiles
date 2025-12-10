@@ -24,7 +24,7 @@ export PAGER='less'
 export MANPAGER='less'
 export LESS_TERMCAP_md=$'\e[1;36m'
 export LESS_TERMCAP_us=$'\e[1;32m'
-export LESS_TERMCAP_so=$'\e[1;44;93m'
+export LESS_TERMCAP_so=$'\e[1;40;36m'
 
 # Git User
 # plugins/git-user.sh
@@ -82,6 +82,7 @@ cli=(
   bat # https://github.com/sharkdp/bat
   cloc # https://github.com/AlDanial/cloc
   dotnet # https://aka.ms/dotnet/info
+  eza # https://github.com/eza-community/eza
   fd # https://github.com/sharkdp/fd
   font-roboto-mono-nerd-font # https://www.nerdfonts.com
   fzf # https://github.com/junegunn/fzf
@@ -100,6 +101,7 @@ cli=(
   mise # https://mise.jdx.dev
   mysql # https://dev.mysql.com
   npm # https://www.npmjs.com
+  nvm # https://github.com/nvm-sh/nvm
   nvim # https://neovim.io
   pipx # https://pipx.pypa.io
   ranger # https://github.com/ranger/ranger

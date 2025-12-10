@@ -1,4 +1,5 @@
 return {
+
   -- code comments
   {
     'numToStr/Comment.nvim',
@@ -6,20 +7,16 @@ return {
     opts = {}
   },
 
-  -- code diagnostics
+  -- extras 
   {
-    "neovim/nvim-lspconfig",
+    "eandrju/cellular-automaton.nvim",
     version = false,
-    opts = function(_, opts)
-      -- run default setup first
-      vim.diagnostic.config(opts.diagnostics)
-
-      -- disable all diagnostics globally at startup
-      -- manually enable with built-in keymap: <leader>ud
-      vim.schedule(function()
-        vim.diagnostic.enable(false)
-      end)
-    end,
+    cmd = "CellularAutomaton",
+    keys = {
+      { "<leader>mel", "<cmd>CellularAutomaton game_of_life<cr>", desc = "Game of Life" },
+      { "<leader>mer", "<cmd>CellularAutomaton make_it_rain<cr>", desc = "Make it rain" },
+      { "<leader>mes", "<cmd>CellularAutomaton scramble<cr>", desc = "Scramble Text" },
+    },
   },
 
   -- file explorer
@@ -42,24 +39,10 @@ return {
     config = function()
       local diff = require("mini.diff")
       diff.setup({
-        -- disabled by default
+        -- disable on startup
         source = diff.gen_source.none(),
       })
     end,
-  },
-
-  -- move lines or words
-  {
-    "nvim-mini/mini.move",
-    version = false,
-    opts = {
-      mappings = {
-        left  = "<A-h>",
-        right = "<A-l>",
-        down  = "<A-j>",
-        up    = "<A-k>",
-      },
-    },
   },
 
   -- multi-line formatting
@@ -80,7 +63,6 @@ return {
     version = false,
     init = function()
       vim.g.VM_leader = "\\"
-      vim.g.VM_theme = "codedark"
       vim.g.VM_maps = {
         ["Find Under"] = "<C-n>",
         ["Find Subword Under"] = "<C-n>",
@@ -97,18 +79,6 @@ return {
       icons = {
         group = " + ",
       },
-    },
-  },
-
-  -- xtras 
-  {
-    "eandrju/cellular-automaton.nvim",
-    version = false,
-    cmd = "CellularAutomaton",
-    keys = {
-      { "<leader>mel", "<cmd>CellularAutomaton game_of_life<cr>", desc = "Game of Life" },
-      { "<leader>mer", "<cmd>CellularAutomaton make_it_rain<cr>", desc = "Make it rain" },
-      { "<leader>mes", "<cmd>CellularAutomaton scramble<cr>", desc = "Scramble Text" },
     },
   },
 

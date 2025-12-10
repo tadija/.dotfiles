@@ -88,7 +88,7 @@ M.formatters_by_ft = {
 
 -- Linters --------------------------------------------------------------------
 M.linters_by_ft = {
-  astro = { "eslint_d", "eslint" },
+  astro = { "eslint_d" },
   bash = { "shellcheck" },
   c = { "cpplint" },
   cpp = { "cpplint" },
@@ -96,9 +96,9 @@ M.linters_by_ft = {
   fortran = { "fortls" },
   go = { "golangci-lint" },
   haskell = { "hlint" },
-  html = { "eslint_d", "eslint" },
+  html = { "eslint_d" },
   java = { "checkstyle" },
-  javascript = { "eslint_d", "eslint" },
+  javascript = { "eslint_d" },
   json = { "jsonlint" },
   kotlin = { "ktlint" },
   lua = { "luacheck" },
@@ -108,8 +108,8 @@ M.linters_by_ft = {
   ruby = { "rubocop" },
   sql = { "sqlfluff" },
   swift = { "swiftlint" },
-  typescript = { "eslint_d", "eslint" },
-  vue = { "eslint_d", "eslint" },
+  typescript = { "eslint_d" },
+  vue = { "eslint_d" },
   yaml = { "yamllint" },
 }
 
@@ -164,7 +164,7 @@ do
       end
     end
   end
-  
+
   local function add(tool)
     if tool and not added[tool] then
       table.insert(M.mason_packages, tool)

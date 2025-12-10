@@ -1,6 +1,15 @@
 -- Autocmds are automatically loaded on the VeryLazy event
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 
+-- on leave insert mode: save the file
+vim.api.nvim_create_autocmd("InsertLeave", {
+  callback = function()
+    if vim.bo.modified and vim.bo.modifiable and vim.fn.expand("%") ~= "" then
+      vim.cmd("silent write")
+    end
+  end,
+})
+
 -- on save: ensure every normal modifiable buffer ends in a newline
 vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(args)

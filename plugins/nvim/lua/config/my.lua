@@ -35,39 +35,40 @@ function M.current_buf_dir()
 end
 
 function M.remove_lazy_keymaps()
-  -- Lazy, LazyChangelog
+  -- Lazy, LazyChangelog, Keywordprg
   del("n", "<leader>l")
   del("n", "<leader>L")
+  del("n", "<leader>K")
 end
 
--- move built-in mappings from <leader>x to <leader>d (not in use)
-function M.move_diagnostics()
-  local diagnostics_keys = { "xl", "xL", "xq", "xQ", "xt", "xT", "xx", "xX" }
-  for _, lhs in ipairs(diagnostics_keys) do
-    local old_lhs = "<leader>" .. lhs
-    local mapping = vim.fn.maparg(old_lhs, "n", false, true)
-    if mapping and not vim.tbl_isempty(mapping) then
-      local rhs = mapping.callback or mapping.rhs
-      if rhs and rhs ~= "" then
-        local opts = {
-          desc = mapping.desc,
-          remap = mapping.noremap == 0 or nil,
-          silent = mapping.silent == 1 or nil,
-          expr = mapping.expr == 1 or nil,
-          nowait = mapping.nowait == 1 or nil,
-          script = mapping.script == 1 or nil,
-        }
-        if mapping.buffer and mapping.buffer > 0 then
-          opts.buffer = mapping.buffer
-        end
+function M.remove_noice_keymaps()
+  del("n", "<leader>snl")
+  del("n", "<leader>snh")
+  del("n", "<leader>sna")
+  del("n", "<leader>snd")
+  del("n", "<leader>snt")
+end
 
-        local new_lhs = lhs:gsub("^x", "d")
-        del("n", old_lhs)
-        map("n", "<leader>" .. new_lhs, rhs, opts)
-        -- dump("remap from: " .. old_lhs .." | to: " .. new_lhs)
-      end
+function M.toggle_noice_console()
+  -- health check
+  local ok, noice = pcall(require, "noice")
+  if not ok then
+    vim.notify("noice is not available", vim.log.levels.WARN)
+    return
+  end
+
+  -- if a noice split view (history/all/messages) is already visible, hide it
+  local views = require("noice.view")._views or {}
+  for _, view in ipairs(views) do
+    local v = view.view
+    if v and v._visible and v._opts and v._opts.type == "split" then
+      v:hide()
+      return
     end
   end
+
+  -- otherwise, open history
+  noice.cmd("history")
 end
 
 return M
