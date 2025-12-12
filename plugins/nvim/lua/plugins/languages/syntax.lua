@@ -189,7 +189,6 @@ function M.get_specs()
     {
       "stevearc/conform.nvim",
       version = false,
-      event = "BufWritePre",
       opts = function(_, opts)
         opts.formatters_by_ft = vim.tbl_extend("force", opts.formatters_by_ft or {}, M.formatters_by_ft)
         return opts
@@ -200,7 +199,6 @@ function M.get_specs()
     {
       "mfussenegger/nvim-lint",
       version = false,
-      event = "BufWritePost",
       opts = function(_, opts)
         opts.linters_by_ft = vim.tbl_extend("force", opts.linters_by_ft or {}, M.linters_by_ft)
         return opts

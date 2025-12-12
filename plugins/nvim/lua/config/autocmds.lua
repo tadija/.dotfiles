@@ -42,3 +42,13 @@ vim.api.nvim_create_autocmd({ "TextYankPost", "TextChanged", "TextChangedI" }, {
   end,
 })
 
+-- on term open: close with q
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function(args)
+    vim.keymap.set("n", "q", "<cmd>close<cr>", {
+      buffer = args.buf,
+      silent = true,
+    })
+  end,
+})
+

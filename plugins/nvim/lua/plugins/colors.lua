@@ -8,15 +8,21 @@ return {
   },
 
   -- add a few themes
+  { "AlexvZyl/nordic.nvim" },
   { "EdenEast/nightfox.nvim" },
+  { "Mofiqul/dracula.nvim" },
   { "ellisonleao/gruvbox.nvim" },
   { "folke/tokyonight.nvim" },
   { "navarasu/onedark.nvim" },
   { "nyoom-engineering/oxocarbon.nvim" },
+  { "olimorris/onedarkpro.nvim" },
+  { "pineapplegiant/spaceduck" },
+  { "projekt0n/github-nvim-theme" },
   { "rebelot/kanagawa.nvim" },
   { "rose-pine/neovim", name = "rose-pine" },
   { "sainnhe/everforest" },
   { "savq/melange-nvim" },
+  { "srcery-colors/srcery-vim" },
 
   -- override tokyonight highlights
   {
