@@ -30,6 +30,7 @@ local term = snacks.terminal
 
 -- project root
 map({ "n", "t" }, "<A-1>", function()
+  my.close_explorer() -- fix layout issue if this terminal starts when explorer is open
   term.toggle(nil, { count = 101, cwd = vim.loop.cwd(), win = { position = "left" } })
 end, { desc = "Terminal (Project)" })
 map({ "n", "t" }, "<A-2>", function()
@@ -62,14 +63,6 @@ wk.add({
   map("n", "<leader>mih", ":LazyHealth<CR>", { desc = "Lazy Health" }),
   map("n", "<leader>mim", ":Mason<CR>", { desc = "Mason" }),
   map("n", "<leader>mio", ":MasonLog<CR>", { desc = "Mason Log" }),
-
-  { "<leader>mn", group = "noice", mode = { "n", "v" } },
-  map("n", "<leader>C", function() my.toggle_noice_console() end, { desc = "Toggle Console" }),
-  map("n", "<leader>mnl", function() noice.cmd("last") end, { desc = "Noice Last Message" }),
-  map("n", "<leader>mnh", function() noice.cmd("history") end, { desc = "Noice History" }),
-  map("n", "<leader>mna", function() noice.cmd("all") end, { desc = "Noice All" }),
-  map("n", "<leader>mnd", function() noice.cmd("dismiss") end, { desc = "Dismiss All" }),
-  map("n", "<leader>mnp", function() noice.cmd("pick") end, { desc = "Noice Picker" }),
 
   map("n", "<leader>mt", "<leader>uC", { desc = "Theme Picker", remap = true }),
   map("n", "<leader>mk", "gcc", { desc = "Toggle Comment", remap = true }),
@@ -109,6 +102,16 @@ wk.add({
   map("n", "<leader>lsi", buf.implementation, { desc = "Go to Implementation" }),
   map("n", "<leader>lsh", buf.hover, { desc = "Hover Documentation" }),
   map("n", "<leader>lss", buf.signature_help, { desc = "Signature Help" }),
+})
+
+-- move noice into diagnostics (x)
+wk.add({
+  { "<leader>xn", group = "noice", mode = { "n", "v" } },
+  map("n", "<leader>xnl", function() noice.cmd("last") end, { desc = "Noice Last Message" }),
+  map("n", "<leader>xnh", function() noice.cmd("history") end, { desc = "Noice History" }),
+  map("n", "<leader>xna", function() noice.cmd("all") end, { desc = "Noice All" }),
+  map("n", "<leader>xnd", function() noice.cmd("dismiss") end, { desc = "Dismiss All" }),
+  map("n", "<leader>xnp", function() noice.cmd("pick") end, { desc = "Noice Picker" }),
 })
 
 -- plugins/languages

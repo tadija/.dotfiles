@@ -12,7 +12,11 @@ function detect-platform() {
 }
 
 function zsh-init() {
-  autoload -Uz compinit && compinit
+  local compdump_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  local compdump_file="$compdump_dir/.zcompdump-${HOST:-$(hostname)}"
+
+  mkdir -p "$compdump_dir"
+  autoload -Uz compinit && compinit -C -d "$compdump_file"
   autoload -U colors && colors
 }
 
@@ -58,11 +62,25 @@ function source-if-present() {
   fi
 }
 
+function init-homebrew-prefix() {
+  if [ -z "$HOMEBREW_PREFIX" ]; then
+    if [ -x "$(command -v brew)" ]; then
+      HOMEBREW_PREFIX=$(brew --prefix)
+    else
+      case "$OS" in
+        macos) HOMEBREW_PREFIX="/opt/homebrew" ;;
+        *)     HOMEBREW_PREFIX="/usr/local" ;;
+      esac
+    fi
+  fi
+}
+
 function zsh-setup-macos {
   if [ -x "$(command -v brew)" ]; then
-    PLUGINS_PATH="$(brew --prefix)/share"
-    source-if-present $PLUGINS_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source-if-present $PLUGINS_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    init-homebrew-prefix
+    PLUGINS_PATH="$HOMEBREW_PREFIX/share"
+    source-if-present "$PLUGINS_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    source-if-present "$PLUGINS_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
   fi
 }
 

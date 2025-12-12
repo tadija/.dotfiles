@@ -5,15 +5,21 @@ function setup-fzf() {
   $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc
 }
 
-# fzf setup for WSL (installed via apt)
-if [ -d /usr/share/doc/fzf/examples ]; then
-  source /usr/share/doc/fzf/examples/key-bindings.zsh
-  source /usr/share/doc/fzf/examples/completion.zsh
-fi
+load_fzf_bindings() {
+  # macOS / homebrew
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh; 
+  # WSL / apt 
+  if [ -d /usr/share/doc/fzf/examples ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+    source /usr/share/doc/fzf/examples/completion.zsh
+  fi
+}
 
 # https://github.com/junegunn/fzf
 if [ -x "$(command -v fzf)" ]; then
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  load_fzf_bindings
+
+  FZF_COMMON_EXCLUDES="--exclude .git --exclude .hg --exclude .svn --exclude node_modules --exclude Pods --exclude Vendor --exclude vendor --exclude build --exclude target --exclude .direnv --exclude .cache --exclude .Trash --exclude Library/Caches"
 
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height 100% --layout=reverse"
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --preview 'bat --color "always" {}'"
@@ -24,27 +30,42 @@ if [ -x "$(command -v fzf)" ]; then
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --bind='ctrl-o:execute(subl {})'"
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --bind='ctrl-c:execute-silent(cat {} | pbcopy)'"
 
-  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude ".git"'
+  export FZF_DEFAULT_COMMAND="fd --type f --hidden $FZF_COMMON_EXCLUDES --max-depth ${FZF_FD_MAX_DEPTH:-12} --strip-cwd-prefix"
 
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_CTRL_T_OPTS="--preview-window=right:60%:wrap"
 
   export FZF_CTRL_R_OPTS="--preview-window=right:0%"
 
-  export FZF_ALT_C_COMMAND='fd --type d --max-depth 4 --hidden --follow --exclude ".git"'
+  export FZF_ALT_C_COMMAND="fd --type d --hidden $FZF_COMMON_EXCLUDES --max-depth ${FZF_ALT_C_MAX_DEPTH:-6}"
   export FZF_ALT_C_OPTS="--preview-window=right:0%"
 
   # Use fd (https://github.com/sharkdp/fd) instead of the default find command for listing path candidates.
   # - The first argument to the function ($1) is the base path to start traversal
   # - See the source code (completion.{bash,zsh}) for the details.
   _fzf_compgen_path() {
-    fd --hidden --follow --exclude ".git" . "$1"
+    fd --hidden $FZF_COMMON_EXCLUDES . "$1"
   }
 
   # Use fd to generate the list for directory completion
   _fzf_compgen_dir() {
-    fd --type d --hidden --follow --exclude ".git" . "$1"
+    fd --type d --hidden $FZF_COMMON_EXCLUDES . "$1"
   }
+
+
+  if [[ -o interactive ]]; then
+    _df_fzf_ctrl_r_widget() { lazy_load fzf load_fzf_bindings; zle _fzf_history_widget; }
+    _df_fzf_ctrl_t_widget() { lazy_load fzf load_fzf_bindings; zle _fzf_file_widget; }
+    _df_fzf_alt_c_widget() { lazy_load fzf load_fzf_bindings; zle _fzf_cd_widget; }
+
+    zle -N _df_fzf_ctrl_r_widget
+    zle -N _df_fzf_ctrl_t_widget
+    zle -N _df_fzf_alt_c_widget
+
+    bindkey '^R' _df_fzf_ctrl_r_widget
+    bindkey '^T' _df_fzf_ctrl_t_widget
+    bindkey '^[c' _df_fzf_alt_c_widget
+  fi
 
   j() {
     local search="$FZF_ALT_C_COMMAND . $HOME"
@@ -62,3 +83,4 @@ if [ -x "$(command -v fzf)" ]; then
   }
 
 fi
+

@@ -1,3 +1,4 @@
+local snacks = require("snacks")
 local del = vim.keymap.del
 local map = vim.keymap.set
 
@@ -6,6 +7,13 @@ local M = {}
 -- quick log
 _G.dump = function(...)
   print(vim.inspect(...))
+end
+
+function M.close_explorer()
+  -- close snacks explorer
+  for _, explorer in ipairs(snacks.picker.get({ source = "explorer" })) do
+    explorer:close()
+  end
 end
 
 -- normalized path to current buffer
@@ -47,28 +55,6 @@ function M.remove_noice_keymaps()
   del("n", "<leader>sna")
   del("n", "<leader>snd")
   del("n", "<leader>snt")
-end
-
-function M.toggle_noice_console()
-  -- health check
-  local ok, noice = pcall(require, "noice")
-  if not ok then
-    vim.notify("noice is not available", vim.log.levels.WARN)
-    return
-  end
-
-  -- if a noice split view (history/all/messages) is already visible, hide it
-  local views = require("noice.view")._views or {}
-  for _, view in ipairs(views) do
-    local v = view.view
-    if v and v._visible and v._opts and v._opts.type == "split" then
-      v:hide()
-      return
-    end
-  end
-
-  -- otherwise, open history
-  noice.cmd("history")
 end
 
 return M

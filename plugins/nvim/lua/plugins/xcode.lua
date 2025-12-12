@@ -23,11 +23,12 @@ return {
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      "wojciech-kulik/xcodebuild.nvim"
+      "wojciech-kulik/xcodebuild.nvim",
     },
     config = function()
       local xcdap = require("xcodebuild.integrations.dap")
       local map = vim.keymap.set
+      local swift = require("plugins.tasks.swift")
       local wk = require("which-key")
       xcdap.setup()
 
@@ -57,17 +58,27 @@ return {
 
       -- xcodebuild dap
       wk.add({
-        { "<leader>mxd", group = "lldb", mode = { "n", "v" } },
-        map("n", "<leader>mxdd", xcdap.build_and_debug, { desc = "Build & Debug" }),
-        map("n", "<leader>mxdr", xcdap.debug_without_build, { desc = "Debug Without Building" }),
-        map("n", "<leader>mxdt", xcdap.debug_tests, { desc = "Debug Tests" }),
-        map("n", "<leader>mxdT", xcdap.debug_class_tests, { desc = "Debug Class Tests" }),
-        map("n", "<leader>mxdb", xcdap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
-        map("n", "<leader>mxdB", xcdap.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" }),
-        map("n", "<leader>mxd.", xcdap.terminate_session, { desc = "Terminate Debugger" }),
+        { "<leader>ml", group = "lldb", mode = { "n", "v" } },
+        map("n", "<leader>mlb", xcdap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
+        map("n", "<leader>mlB", xcdap.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" }),
+        map("n", "<leader>mld", xcdap.build_and_debug, { desc = "Build & Debug" }),
+        map("n", "<leader>mlr", xcdap.debug_without_build, { desc = "Debug Without Building" }),
+        map("n", "<leader>mlt", xcdap.debug_tests, { desc = "Debug Tests" }),
+        map("n", "<leader>mlT", xcdap.debug_class_tests, { desc = "Debug Class Tests" }),
+        map("n", "<leader>ml.", xcdap.terminate_session, { desc = "Terminate Debugger" }),
+      })
+
+      -- swift cmds
+      wk.add({
+        { "<leader>ms", group = "swift", mode = { "n", "v" } },
+        map("n", "<leader>msb", swift.build, { desc = "Swift Build" }),
+        map("n", "<leader>msr", swift.repl, { desc = "Swift REPL" }),
+        map("n", "<leader>msR", swift.run, { desc = "Swift Run" }),
+        map("n", "<leader>mst", swift.test, { desc = "Swift Test" }),
+        map("n", "<leader>msc", swift.clean, { desc = "Swift Clean" }),
+        map("n", "<leader>msu", swift.update, { desc = "Swift Update" }),
       })
     end,
   },
-
 }
 
