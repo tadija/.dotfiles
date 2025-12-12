@@ -1,13 +1,7 @@
--- lua/plugins/languages.lua
--- Coordinator that wires syntax, servers, and task helpers together.
-
 local lsp = require("plugins.languages.lsp")
 local dap = require("plugins.languages.dap")
 local syntax = require("plugins.languages.syntax")
 local servers = require("plugins.languages.servers")
-local tasks = require("plugins.languages.tasks")
-
-tasks.setup()
 
 local function lsp_spec()
   return {

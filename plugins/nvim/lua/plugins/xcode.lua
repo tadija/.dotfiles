@@ -28,7 +28,7 @@ return {
     config = function()
       local xcdap = require("xcodebuild.integrations.dap")
       local map = vim.keymap.set
-      local swift = require("plugins.tasks.swift")
+      local swift = require("plugins.utils.swift")
       local wk = require("which-key")
       xcdap.setup()
 
