@@ -64,7 +64,13 @@ wk.add({
   map("n", "<leader>mim", ":Mason<CR>", { desc = "Mason" }),
   map("n", "<leader>mio", ":MasonLog<CR>", { desc = "Mason Log" }),
 
-  map("n", "<leader>mt", "<leader>uC", { desc = "Theme Picker", remap = true }),
+  { "<leader>mt", group = "tasks", icon = "", mode = { "n", "v" } },
+  map("n", "<leader>mtb", "<cmd>TaskBuild<CR>", { desc = "Build" }),
+  map("n", "<leader>mtt", "<cmd>TaskTest<CR>", { desc = "Test" }),
+  map("n", "<leader>mtl", "<cmd>TaskLint<CR>", { desc = "Lint" }),
+  map("n", "<leader>mtf", "<cmd>TaskFormat<CR>", { desc = "Format" }),
+
+  map("n", "<leader>mc", "<leader>uC", { desc = "Colorschemes", remap = true }),
   map("n", "<leader>mk", "gcc", { desc = "Toggle Comment", remap = true }),
   map("v", "<leader>mk", "gc", { desc = "Toggle Comment", remap = true }),
   map("n", "<leader>mS", "<cmd>silent! wa<CR>", { desc = "Save All" }),
@@ -88,20 +94,20 @@ wk.add({
 
 -- lsp
 wk.add({
-  { "<leader>ls", group = "lsp", mode = { "n", "v" } },
-  map("n", "<leader>lsI", ":LspInfo<CR>", { desc = "Lsp Info" }),
-  map("n", "<leader>lsL", ":LspLog<CR>", { desc = "Lsp Log" }),
-  map("n", "<leader>lsR", ":LspRestart<CR>", { desc = "Lsp Restart" }),
-  map("n", "<leader>lsa", buf.code_action, { desc = "Code Action" }),
-  map("v", "<leader>lsf", buf.format, { desc = "Format Selection" }),
-  map("n", "<leader>lsr", buf.rename, { desc = "Rename Symbol" }),
-  map("n", "<leader>lsc", buf.references, { desc = "Show References" }),
-  map("n", "<leader>lsd", buf.definition, { desc = "Go to Definition" }),
-  map("n", "<leader>lsD", buf.declaration, { desc = "Go to Declaration" }),
-  map("n", "<leader>lst", buf.type_definition, { desc = "Go to Type Definition" }),
-  map("n", "<leader>lsi", buf.implementation, { desc = "Go to Implementation" }),
-  map("n", "<leader>lsh", buf.hover, { desc = "Hover Documentation" }),
-  map("n", "<leader>lss", buf.signature_help, { desc = "Signature Help" }),
+  { "<leader>l", group = "lsp", mode = { "n", "v" } },
+  map("n", "<leader>lI", ":LspInfo<CR>", { desc = "Lsp Info" }),
+  map("n", "<leader>lL", ":LspLog<CR>", { desc = "Lsp Log" }),
+  map("n", "<leader>lR", ":LspRestart<CR>", { desc = "Lsp Restart" }),
+  map("n", "<leader>la", buf.code_action, { desc = "Code Action" }),
+  map("v", "<leader>lf", buf.format, { desc = "Format Selection" }),
+  map("n", "<leader>lr", buf.rename, { desc = "Rename Symbol" }),
+  map("n", "<leader>lc", buf.references, { desc = "Show References" }),
+  map("n", "<leader>ld", buf.definition, { desc = "Go to Definition" }),
+  map("n", "<leader>lD", buf.declaration, { desc = "Go to Declaration" }),
+  map("n", "<leader>lt", buf.type_definition, { desc = "Go to Type Definition" }),
+  map("n", "<leader>li", buf.implementation, { desc = "Go to Implementation" }),
+  map("n", "<leader>lh", buf.hover, { desc = "Hover Documentation" }),
+  map("n", "<leader>ls", buf.signature_help, { desc = "Signature Help" }),
 })
 
 -- move noice into diagnostics (x)
@@ -112,16 +118,6 @@ wk.add({
   map("n", "<leader>xna", function() noice.cmd("all") end, { desc = "Noice All" }),
   map("n", "<leader>xnd", function() noice.cmd("dismiss") end, { desc = "Dismiss All" }),
   map("n", "<leader>xnp", function() noice.cmd("pick") end, { desc = "Noice Picker" }),
-})
-
--- plugins/languages
-my.remove_lazy_keymaps()
-wk.add({
-  { "<leader>l", group = "language", icon = "", mode = { "n", "v" } },
-  map("n", "<leader>ll", "<cmd>LangTaskLint<CR>", { desc = "Lint" }),
-  map("n", "<leader>lf", "<cmd>LangTaskFormat<CR>", { desc = "Format" }),
-  map("n", "<leader>lb", "<cmd>LangTaskBuild<CR>", { desc = "Build" }),
-  map("n", "<leader>lt", "<cmd>LangTaskTest<CR>", { desc = "Test" }),
 })
 
 -- plugins/ai
