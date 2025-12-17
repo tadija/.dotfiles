@@ -3,13 +3,13 @@
 
 local dap = require("dap")
 local cc = require("codecompanion")
+local ai_utils = require("plugins.ai.utils")
 local my = require("config.my")
 local noice = require("noice")
 local snacks = require("snacks")
 local util = require("lazyvim.util")
 local wk = require("which-key")
 
-local del = vim.keymap.del
 local map = vim.keymap.set
 local buf = vim.lsp.buf
 
@@ -123,12 +123,21 @@ wk.add({
 -- plugins/ai
 wk.add({
   { "<leader>a", group = "ai", mode = { "n", "v" } },
-  map("n", "<leader>A", "<cmd>CodeCompanionChat Toggle<CR>", { desc = "Toggle AI Chat" }),
-  map("n", "<leader>ap", "<cmd>CodeCompanion<CR>", { desc = "Input Prompt" }),
+  map({ "n", "v" }, "<leader>A", function() ai_utils.toggle_chat() end, { desc = "Toggle AI Chat" }),
+  map({ "x" }, "<leader>a2", "<cmd>CodeCompanionChat Add<CR>", { desc = "Add 2 Chat" }),
+  map({ "x" }, "<leader>a+", ai_utils.send_selection_to_many, { desc = "Send to many" }),
+  map({ "n" }, "<leader>a+", ai_utils.send_chat_to_many, { desc = "Chat with many" }),
   map({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionActions<CR>", { desc = "All Actions" }),
-  map({ "n", "v" }, "<leader>ae", function() cc.prompt("senior") end, { desc = "Advice Expert" }),
-  map({ "n", "v" }, "<leader>av", function() cc.prompt("vibe") end, { desc = "Vibe Code" }),
-  map("v", "<leader>a2", "<cmd>CodeCompanionChat Add<CR>", { desc = "Add 2 Chat" }),
-  map("x", "<leader>ap", ":'<,'>CodeCompanion ", { desc = "Prompt (selection)" }),
+  map({ "n", "v" }, "<leader>ac", function() ai_utils.toggle_chat() end, { desc = "Chat" }),
+  map({ "n", "v" }, "<leader>aC", ai_utils.chat_select_and_toggle, { desc = "Chat (Select)" }),
+  map({ "n" }, "<leader>ai", "<cmd>CodeCompanion<CR>", { desc = "Inline" }),
+  map({ "x" }, "<leader>ai", ":'<,'>CodeCompanion", { desc = "Inline (with selection)" }),
+  map({ "n", "v" }, "<leader>aI", ai_utils.prompt_select_and_run, { desc = "Inline (Select)" }),
+  map({ "n", "v" }, "<leader>am", ai_utils.cmd_prompt, { desc = "Cmd" }),
+  map({ "n", "v" }, "<leader>aM", ai_utils.cmd_select_and_run, { desc = "Cmd (Select)" }),
+  map({ "n", "v" }, "<leader>ae", function() cc.prompt("senior") end, { desc = "Advice Expert [chat]" }),
+  map({ "n", "v" }, "<leader>av", function() cc.prompt("vibe") end, { desc = "Vibe Code [inline]" }),
 })
+
+ai_utils.refresh_adapter_labels()
 
