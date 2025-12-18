@@ -39,3 +39,7 @@ gt() {
   cd "$dir"
 }
 
+npp() {
+  "/mnt/c/Program Files/Notepad++/notepad++.exe" "$(wslpath -w "$1")"
+}
+

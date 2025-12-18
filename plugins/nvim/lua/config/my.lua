@@ -1,6 +1,5 @@
 local snacks = require("snacks")
 local del = vim.keymap.del
-local map = vim.keymap.set
 
 local M = {}
 
@@ -55,6 +54,18 @@ function M.remove_noice_keymaps()
   del("n", "<leader>sna")
   del("n", "<leader>snd")
   del("n", "<leader>snt")
+  del("n", "<leader>sn")
+end
+
+function M.random_colorscheme()
+  local ok, themes = pcall(vim.fn.getcompletion, "", "color")
+  if not ok or vim.tbl_isempty(themes) then
+    return vim.notify("No colorschemes found", vim.log.levels.WARN)
+  end
+  math.randomseed(os.time())
+  local choice = themes[math.random(#themes)]
+  vim.cmd.colorscheme(choice)
+  vim.notify("Colorscheme -> " .. choice)
 end
 
 return M

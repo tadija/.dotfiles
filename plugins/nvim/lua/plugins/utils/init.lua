@@ -24,11 +24,13 @@ return {
     'stevearc/oil.nvim',
     ---@module 'oil'
     ---@type oil.SetupOpts
-    opts = {},
     dependencies = { { "nvim-mini/mini.icons", opts = {} } },
     lazy = false,
     init = function()
-      require("oil").setup()
+      require("oil").setup({
+        default_file_explorer = false,
+        delete_to_trash = true,
+      })
     end,
   },
 
@@ -69,6 +71,18 @@ return {
         ["Select All"] = "<C-A-n>",
       }
     end,
+  },
+
+  -- snacks
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      explorer = {
+        replace_netrw = true,
+        trash = true,
+      },
+    },
   },
 
   -- which-key

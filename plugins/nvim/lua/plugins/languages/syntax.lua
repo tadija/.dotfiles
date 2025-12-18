@@ -155,6 +155,7 @@ do
     -- mason n/a (install manually)
     sourcekit = true,
     swiftformat = true,
+    swiftlint = true,
   }
 
   local function collect_tools(map, add)

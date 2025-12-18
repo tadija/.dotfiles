@@ -54,12 +54,6 @@ return {
     sources = {
       default = { 'codecompanion', 'lazydev', 'dadbod', 'lsp', 'path', 'snippets', 'buffer' },
       providers = {
-        cmdline = {
-          -- ignores cmdline completions when executing shell commands (avoid hang on WSL)
-          enabled = function()
-            return vim.fn.getcmdtype() ~= ':' or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
-          end
-        },
         codecompanion = {
           name = 'CodeCompanion',
           module = 'codecompanion.providers.completion.blink',
@@ -74,3 +68,4 @@ return {
     },
   },
 }
+

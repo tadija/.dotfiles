@@ -4,6 +4,7 @@
 function df-reload() {
   source ~/.zshrc
   echo "platform: $OS"
+  exec zsh
 }
 
 function df-find() {
@@ -108,3 +109,4 @@ function df-install() {
 
   brew cleanup
 }
+
