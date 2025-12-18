@@ -17,7 +17,10 @@ export LC_ALL="en_US.UTF-8"
 
 export TERM='xterm-256color'
 export COLORTERM='truecolor'
-export EDITOR='nvim'
+
+export EDITOR="nvim"
+export VISUAL="$EDITOR"
+
 export LESS='-RXMF'
 export PAGER='less'
 
@@ -80,12 +83,15 @@ qlplugins=(
 cli=(
   ast-grep # https://github.com/ast-grep/ast-grep
   bat # https://github.com/sharkdp/bat
+  codex # https://openai.com/codex
+  claude-code # https://code.claude.com
   cloc # https://github.com/AlDanial/cloc
   dotnet # https://aka.ms/dotnet/info
   eza # https://github.com/eza-community/eza
   fd # https://github.com/sharkdp/fd
   font-roboto-mono-nerd-font # https://www.nerdfonts.com
   fzf # https://github.com/junegunn/fzf
+  gemini-cli # https://geminicli.com
   gh # https://cli.github.com
   git # https://git-scm.com
   git-lfs # https://git-lfs.github.com
@@ -133,9 +139,11 @@ apps_installation_path="/Applications"
 apps=(
   alfred
   appcleaner
+  chatgpt
   db-browser-for-sqlite
   docker
   fork
+  ghostty
   macdown
   rapidapi
   red-eye

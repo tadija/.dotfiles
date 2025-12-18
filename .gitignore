@@ -93,8 +93,8 @@ fastlane/test_output
 # Editors
 .nvim/
 .vscode/
+buildServer.json
 
-# Custom
-.env.local
+# Local
 *.local
 

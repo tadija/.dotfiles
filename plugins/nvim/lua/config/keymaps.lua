@@ -13,9 +13,6 @@ local wk = require("which-key")
 local map = vim.keymap.set
 local buf = vim.lsp.buf
 
--- extend built-in "search" keymap
-map("n", "<leader>sk", function() snacks.picker.keymaps() end, { desc = "[S]earch [K]eymaps" })
-
 -- file browser
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
@@ -46,23 +43,27 @@ end, { desc = "Terminal (Buffer)" })
 map({ "n", "t" }, "<A-4>", "<C-/>", { desc = "Terminal (Default)", remap = true })
 
 -- my keymaps
-my.remove_noice_keymaps()
+my.remove_lazy_keymaps()
 wk.add({
   { "<leader>m", group = "my", icon = "", mode = { "n", "v" } },
   { "<leader>me", group = "extras", icon = "", mode = { "n", "v" } },
 
   { "<leader>ma", group = "all", icon = "󰈚", mode = { "n", "v" } },
-  map("n", "<leader>mas", "ggVG", { desc = "Select all" }),
   map("n", "<leader>mai", "gg=G", { desc = "Indent all" }),
-  map("n", "<leader>may", ":%y+<CR>", { desc = "Yank all" }),
   map("n", "<leader>mad", ":%d+<CR>", { desc = "Delete all" }),
+  map("n", "<leader>mav", "ggVG", { desc = "Select all" }),
+  map("n", "<leader>may", ":%y+<CR>", { desc = "Yank all" }),
+  map("n", "<leader>mas", "<cmd>silent! wa<CR>", { desc = "Save All" }),
 
-  { "<leader>mi", group = "install/update", mode = { "n", "v" } },
-  map("n", "<leader>mil", ":Lazy<CR>", { desc = "Lazy" }),
-  map("n", "<leader>mie", ":LazyExtras<CR>", { desc = "Lazy Extras" }),
-  map("n", "<leader>mih", ":LazyHealth<CR>", { desc = "Lazy Health" }),
-  map("n", "<leader>mim", ":Mason<CR>", { desc = "Mason" }),
-  map("n", "<leader>mio", ":MasonLog<CR>", { desc = "Mason Log" }),
+  { "<leader>md", group = "dashboard", mode = { "n", "v" } },
+  map("n", "<leader>mdc", function() snacks.picker.commands() end, { desc = "Commands" }),
+  map("n", "<leader>mdk", function() snacks.picker.keymaps() end, { desc = "Keymaps" }),
+  map("n", "<leader>mdh", function() snacks.picker.help() end, { desc = "Help" }),
+  map("n", "<leader>mdl", ":Lazy<CR>", { desc = "Lazy" }),
+  map("n", "<leader>mde", ":LazyExtras<CR>", { desc = "Lazy Extras" }),
+  map("n", "<leader>mdH", ":LazyHealth<CR>", { desc = "Lazy Health" }),
+  map("n", "<leader>mdm", ":Mason<CR>", { desc = "Mason" }),
+  map("n", "<leader>mdo", ":MasonLog<CR>", { desc = "Mason Log" }),
 
   { "<leader>mt", group = "tasks", icon = "", mode = { "n", "v" } },
   map("n", "<leader>mtb", "<cmd>TaskBuild<CR>", { desc = "Build" }),
@@ -70,11 +71,10 @@ wk.add({
   map("n", "<leader>mtl", "<cmd>TaskLint<CR>", { desc = "Lint" }),
   map("n", "<leader>mtf", "<cmd>TaskFormat<CR>", { desc = "Format" }),
 
-  map("n", "<leader>mc", "<leader>uC", { desc = "Colorschemes", remap = true }),
-  map("n", "<leader>mk", "gcc", { desc = "Toggle Comment", remap = true }),
-  map("v", "<leader>mk", "gc", { desc = "Toggle Comment", remap = true }),
-  map("n", "<leader>mS", "<cmd>silent! wa<CR>", { desc = "Save All" }),
-  map("n", "<leader>mq", "<cmd>silent! wa | silent! qa!<CR>", { desc = "Save All + Quit" }),
+  map("n", "<leader>mC", "<leader>uC", { desc = "Select Colorscheme", remap = true }),
+  map("n", "<leader>mc", my.random_colorscheme, { desc = "Random Colorscheme" }),
+  map("n", "<leader>mq", "<cmd>silent! wa | silent! qa!<CR>", { desc = "Save All & Quit" }),
+  map("n", "<leader>mQ", "<cmd>silent! qa!<CR>", { desc = "Quit All Without Saving" }),
 })
 
 -- dap
@@ -110,7 +110,8 @@ wk.add({
   map("n", "<leader>ls", buf.signature_help, { desc = "Signature Help" }),
 })
 
--- move noice into diagnostics (x)
+-- move noice from search (s) into diagnostics (x)
+my.remove_noice_keymaps()
 wk.add({
   { "<leader>xn", group = "noice", mode = { "n", "v" } },
   map("n", "<leader>xnl", function() noice.cmd("last") end, { desc = "Noice Last Message" }),
