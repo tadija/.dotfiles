@@ -15,6 +15,15 @@ function M.close_explorer()
   end
 end
 
+function M.close_left_terminal()
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.b[buf].snacks_terminal and vim.w[win].snacks_win and vim.w[win].snacks_win.position == "left" then
+      vim.api.nvim_win_close(win, true)
+    end
+  end
+end
+
 -- normalized path to current buffer
 function M.current_buf_dir()
   -- get buffer
@@ -57,16 +66,4 @@ function M.remove_noice_keymaps()
   del("n", "<leader>sn")
 end
 
-function M.random_colorscheme()
-  local ok, themes = pcall(vim.fn.getcompletion, "", "color")
-  if not ok or vim.tbl_isempty(themes) then
-    return vim.notify("No colorschemes found", vim.log.levels.WARN)
-  end
-  math.randomseed(os.time())
-  local choice = themes[math.random(#themes)]
-  vim.cmd.colorscheme(choice)
-  vim.notify("Colorscheme -> " .. choice)
-end
-
 return M
-

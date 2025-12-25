@@ -17,8 +17,6 @@ load_fzf_bindings() {
 
 # https://github.com/junegunn/fzf
 if [ -x "$(command -v fzf)" ]; then
-  load_fzf_bindings
-
   FZF_COMMON_EXCLUDES="--exclude .git --exclude .hg --exclude .svn --exclude node_modules --exclude Pods --exclude Vendor --exclude vendor --exclude build --exclude target --exclude .direnv --exclude .cache --exclude .Trash --exclude Library/Caches"
 
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height 100% --layout=reverse"
@@ -54,17 +52,11 @@ if [ -x "$(command -v fzf)" ]; then
 
 
   if [[ -o interactive ]]; then
-    _df_fzf_ctrl_r_widget() { lazy_load fzf load_fzf_bindings; zle _fzf_history_widget; }
-    _df_fzf_ctrl_t_widget() { lazy_load fzf load_fzf_bindings; zle _fzf_file_widget; }
-    _df_fzf_alt_c_widget() { lazy_load fzf load_fzf_bindings; zle _fzf_cd_widget; }
+    load_fzf_bindings
 
-    zle -N _df_fzf_ctrl_r_widget
-    zle -N _df_fzf_ctrl_t_widget
-    zle -N _df_fzf_alt_c_widget
-
-    bindkey '^R' _df_fzf_ctrl_r_widget
-    bindkey '^T' _df_fzf_ctrl_t_widget
-    bindkey '^[c' _df_fzf_alt_c_widget
+    (( $+widgets[_fzf_history_widget] )) && bindkey '^R' _fzf_history_widget
+    (( $+widgets[_fzf_file_widget] )) && bindkey '^T' _fzf_file_widget
+    (( $+widgets[_fzf_cd_widget] )) && bindkey '^[c' _fzf_cd_widget
   fi
 
   j() {
