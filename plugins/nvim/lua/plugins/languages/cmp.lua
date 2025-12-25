@@ -13,8 +13,9 @@ return {
       nerd_font_variant = 'mono'
     },
     completion = {
-      documentation = { 
-        auto_show = false,
+      ghost_text = {
+        enabled = true,
+        show_with_menu = false,
       },
       menu = {
         auto_show = false,
@@ -52,7 +53,7 @@ return {
       ['9'] = { function() cmp.accept({ index = 9 }) end, 'fallback' },
     },
     sources = {
-      default = { 'codecompanion', 'lazydev', 'dadbod', 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lsp', 'snippets', 'lazydev', 'codecompanion', 'dadbod', 'path', 'buffer' },
       providers = {
         codecompanion = {
           name = 'CodeCompanion',

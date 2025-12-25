@@ -1,7 +1,9 @@
-local lsp = require("plugins.languages.lsp")
+local cmp = require("plugins.languages.cmp")
 local dap = require("plugins.languages.dap")
-local syntax = require("plugins.languages.syntax")
+local lsp = require("plugins.languages.lsp")
 local servers = require("plugins.languages.servers")
+local syntax = require("plugins.languages.syntax")
+local utils =  require("plugins.languages.utils")
 
 local function lsp_spec()
   return {
@@ -36,6 +38,9 @@ local specs = { lsp_spec() }
 vim.list_extend(specs, syntax.get_specs())
 
 return {
+  cmp,
+  dap,
   specs,
+  utils,
 }
 

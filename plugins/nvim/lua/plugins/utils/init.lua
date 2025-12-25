@@ -1,5 +1,7 @@
 return {
 
+  { import = "plugins.utils.colors" },
+
   -- code comments
   {
     'numToStr/Comment.nvim',
@@ -77,12 +79,21 @@ return {
   {
     "folke/snacks.nvim",
     ---@type snacks.Config
-    opts = {
-      explorer = {
+    opts = function(_, opts)
+      opts = opts or {}
+      opts.explorer = vim.tbl_deep_extend("force", opts.explorer or {}, {
         replace_netrw = true,
         trash = true,
-      },
-    },
+      })
+      opts.picker = opts.picker or {}
+      opts.picker.sources = opts.picker.sources or {}
+      opts.picker.sources.explorer = vim.tbl_deep_extend("force", opts.picker.sources.explorer or {}, {
+        on_show = function()
+          require("config.my").close_left_terminal()
+        end,
+      })
+      return opts
+    end,
   },
 
   -- which-key

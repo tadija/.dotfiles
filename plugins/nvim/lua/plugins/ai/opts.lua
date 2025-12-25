@@ -2,6 +2,9 @@ local function codecompanion_opts()
   local cc_defaults = require("codecompanion.config")
   local ai_utils = require("plugins.ai.utils")
 
+  local codex = vim.deepcopy(require("codecompanion.adapters.acp.codex"))
+  codex.defaults.auth_method = "chatgpt"
+
   local chat = vim.deepcopy(cc_defaults.interactions.chat)
   chat.adapter = "codex"
   chat.opts = vim.tbl_deep_extend("force", chat.opts or {}, {
@@ -22,6 +25,11 @@ local function codecompanion_opts()
   }
 
   return {
+    adapters = {
+      acp = {
+        codex = codex,
+      },
+    },
     display = {
       chat = {
         intro_message = ai_utils.chat_intro(chat.adapter),

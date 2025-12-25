@@ -5,6 +5,22 @@ return {
     opts = {
       colorscheme = "tokyonight",
     },
+    init = function()
+      local function set_random_colorscheme()
+        local ok, themes = pcall(vim.fn.getcompletion, "", "color")
+        if not ok or vim.tbl_isempty(themes) then
+          return vim.notify("No colorschemes found", vim.log.levels.WARN)
+        end
+        math.randomseed(os.time())
+        local choice = themes[math.random(#themes)]
+        vim.cmd.colorscheme(choice)
+        vim.notify("Colorscheme -> " .. choice)
+      end
+
+      vim.api.nvim_create_user_command("SetRandomColorScheme", set_random_colorscheme, {
+        desc = "Set random colorscheme",
+      })
+    end,
   },
 
   -- add a few themes
