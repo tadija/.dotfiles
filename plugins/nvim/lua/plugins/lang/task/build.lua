@@ -1,4 +1,4 @@
-local util = require("plugins.tasks.util")
+local util = require("plugins.lang.task.util")
 
 local M = {}
 
