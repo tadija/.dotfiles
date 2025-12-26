@@ -1,4 +1,4 @@
--- lua/plugins/languages/syntax.lua
+-- lua/plugins/lang/core/syntax.lua
 -- Treesitter, formatters, linters, Mason tooling, and related plugin specs.
 
 local M = {}

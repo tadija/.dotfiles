@@ -1,8 +1,8 @@
-local util = require("plugins.tasks.util")
-local build = require("plugins.tasks.build")
-local test = require("plugins.tasks.test")
-local lint = require("plugins.tasks.lint")
-local format = require("plugins.tasks.format")
+local util = require("plugins.lang.task.util")
+local build = require("plugins.lang.task.build")
+local test = require("plugins.lang.task.test")
+local lint = require("plugins.lang.task.lint")
+local format = require("plugins.lang.task.format")
 
 local M = {}
 
@@ -56,4 +56,3 @@ function M.setup()
 end
 
 return M
-

@@ -1,4 +1,4 @@
--- lua/plugins/languages/servers.lua
+-- lua/plugins/lang/core/servers.lua
 -- Language server configurations shared with nvim-lspconfig.
 
 local util = require("lspconfig.util")
