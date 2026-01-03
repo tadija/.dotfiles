@@ -6,17 +6,34 @@ local dap = require("dap")
 local dapui = require("dapui")
 local cc = require("codecompanion")
 local ai_utils = require("plugins.ai.utils")
-local my = require("config.my")
 local noice = require("noice")
 local snacks = require("snacks")
+local ruby = require("plugins.lang.ruby")
 local swift = require("plugins.lang.swift")
 local toggles = require("plugins.utils.toggles")
 local xcdap = require("xcodebuild.integrations.dap")
 local util = require("lazyvim.util")
 local wk = require("which-key")
 
+local del = vim.keymap.del
 local map = vim.keymap.set
 local buf = vim.lsp.buf
+
+-- helpers
+local function remove_lazy_keymaps()
+  del("n", "<leader>l")
+  del("n", "<leader>L")
+  del("n", "<leader>K")
+end
+
+local function remove_noice_keymaps()
+  del("n", "<leader>snl")
+  del("n", "<leader>snh")
+  del("n", "<leader>sna")
+  del("n", "<leader>snd")
+  del("n", "<leader>snt")
+  del("n", "<leader>sn")
+end
 
 -- file browser
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
@@ -27,8 +44,15 @@ map("n", "<C-A-h>", "<cmd>vertical resize -2<CR>", { desc = "Decrease Width" })
 map("n", "<C-A-j>", "<cmd>resize +2<CR>", { desc = "Increase Height" })
 map("n", "<C-A-k>", "<cmd>resize -2<CR>", { desc = "Decrease Height" })
 
+-- terminals
+local terms = require("plugins.utils.terms")
+map({ "n", "t" }, "<A-1>", terms.toggle_left, { desc = "Terminal (Left)" })
+map({ "n", "t" }, "<A-2>", terms.toggle_float, { desc = "Terminal (Floating)" })
+map({ "n", "t" }, "<A-3>", terms.toggle_right, { desc = "Terminal (Right)" })
+map({ "n", "t" }, "<A-4>", "<C-/>", { desc = "Terminal (Default)", remap = true })
+
 -- my keymaps
-my.remove_lazy_keymaps()
+remove_lazy_keymaps()
 wk.add({
   { "<leader>m", group = "my", icon = "", mode = { "n", "v" } },
   { "<leader>me", group = "extras", icon = "", mode = { "n", "v" } },
@@ -57,83 +81,14 @@ wk.add({
   map("n", "<leader>mdm", ":Mason<CR>", { desc = "Mason" }),
   map("n", "<leader>mdo", ":MasonLog<CR>", { desc = "Mason Log" }),
 
-  -- swift
-  { "<leader>ms", group = "swift", icon = "󰛥", mode = { "n", "v" } },
-  map("n", "<leader>msb", swift.build, { desc = "Swift Build" }),
-  map("n", "<leader>msr", swift.repl, { desc = "Swift REPL" }),
-  map("n", "<leader>msR", swift.run, { desc = "Swift Run" }),
-  map("n", "<leader>mst", swift.test, { desc = "Swift Test" }),
-  map("n", "<leader>msc", swift.clean, { desc = "Swift Clean" }),
-  map("n", "<leader>msu", swift.update, { desc = "Swift Update" }),
-
-  -- tasks
-  { "<leader>mt", group = "tasks", icon = "", mode = { "n", "v" } },
-  map("n", "<leader>mtb", "<cmd>TaskBuild<CR>", { desc = "Build" }),
-  map("n", "<leader>mtt", "<cmd>TaskTest<CR>", { desc = "Test" }),
-  map("n", "<leader>mtl", "<cmd>TaskLint<CR>", { desc = "Lint" }),
-  map("n", "<leader>mtf", "<cmd>TaskFormat<CR>", { desc = "Format" }),
-
   -- toggles
-  { "<leader>mg", group = "toggles", mode = { "n", "v" } },
-  map("n", "<leader>mgc", toggles.toggle_completions, { desc = "Toggle Completions" }),
-  map("n", "<leader>mgd", toggles.toggle_diagnostics, { desc = "Toggle Diagnostics" }),
-  map("n", "<leader>mgf", toggles.toggle_auto_format, { desc = "Toggle Auto-Format" }),
-  map("n", "<leader>mgl", toggles.toggle_lsp, { desc = "Toggle LSP" }),
-  map("n", "<leader>mgz", toggles.toggle_zen, { desc = "Toggle Zen-Mode" }),
+  { "<leader>mt", group = "toggles", mode = { "n", "v" } },
+  map("n", "<leader>mtc", toggles.toggle_completions, { desc = "Toggle Completions" }),
+  map("n", "<leader>mtd", toggles.toggle_diagnostics, { desc = "Toggle Diagnostics" }),
+  map("n", "<leader>mtf", toggles.toggle_auto_format, { desc = "Toggle Auto-Format" }),
+  map("n", "<leader>mtl", toggles.toggle_lsp, { desc = "Toggle LSP" }),
+  map("n", "<leader>mtz", toggles.toggle_zen, { desc = "Toggle Zen-Mode" }),
 })
-
--- dap
-wk.add({
-  { "<leader>d", group = "debug/profile", mode = { "n", "v" } },
-  map("n", "<leader>dc", dap.continue, { desc = "Continue" }),
-  map("n", "<leader>dC", dap.run_to_cursor, { desc = "Run to Cursor" }),
-  map("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
-  map({ "n", "v" }, "<leader>de", function() dapui.eval() end, { desc = "Eval" }),
-  map("n", "<leader>df", function() dapui.float_element() end, { desc = "Float Element" }),
-  map({ "n", "v" }, "<leader>dh", require("dap.ui.widgets").hover, { desc = "Hover" }),
-  map("n", "<leader>do", dap.step_over, { desc = "Step Over" }),
-  map("n", "<leader>di", dap.step_into, { desc = "Step Into" }),
-  map("n", "<leader>dO", dap.step_out, { desc = "Step Out" }),
-  map("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" }),
-  map("n", "<leader>du", function() dapui.toggle() end, { desc = "Toggle UI" }),
-  map("n", "<leader>d.", dap.close, { desc = "Terminate Session" }),
-})
-
--- lsp
-wk.add({
-  { "<leader>l", group = "lsp", mode = { "n", "v" } },
-  map("n", "<leader>lI", ":LspInfo<CR>", { desc = "Lsp Info" }),
-  map("n", "<leader>lL", ":LspLog<CR>", { desc = "Lsp Log" }),
-  map("n", "<leader>lR", ":LspRestart<CR>", { desc = "Lsp Restart" }),
-  map("n", "<leader>la", buf.code_action, { desc = "Code Action" }),
-  map("v", "<leader>lf", buf.format, { desc = "Format Selection" }),
-  map("n", "<leader>lr", buf.rename, { desc = "Rename Symbol" }),
-  map("n", "<leader>lc", buf.references, { desc = "Show References" }),
-  map("n", "<leader>ld", buf.definition, { desc = "Go to Definition" }),
-  map("n", "<leader>lD", buf.declaration, { desc = "Go to Declaration" }),
-  map("n", "<leader>lt", buf.type_definition, { desc = "Go to Type Definition" }),
-  map("n", "<leader>li", buf.implementation, { desc = "Go to Implementation" }),
-  map("n", "<leader>lh", buf.hover, { desc = "Hover Documentation" }),
-  map("n", "<leader>ls", buf.signature_help, { desc = "Signature Help" }),
-})
-
--- terminals
-local term = snacks.terminal
-
-map({ "n", "t" }, "<A-1>", function()
-  my.close_explorer()
-  term.toggle(nil, { count = 101, cwd = my.current_buf_dir(), win = { position = "left" } })
-end, { desc = "Terminal (Current)" })
-
-map({ "n", "t" }, "<A-2>", function()
-  term.toggle(nil, { count = 102, cwd = vim.loop.cwd(), win = { position = "float" } })
-end, { desc = "Terminal (Floating)" })
-
-map({ "n", "t" }, "<A-3>", function()
-  term.toggle(nil, { count = 103, cwd = vim.loop.cwd(), win = { position = "right" } })
-end, { desc = "Terminal" })
-
-map({ "n", "t" }, "<A-4>", "<C-/>", { desc = "Terminal (Default)", remap = true })
 
 -- plugins/ai
 wk.add({
@@ -155,50 +110,122 @@ wk.add({
 })
 ai_utils.refresh_adapter_labels()
 
--- plugins/xcode
+-- plugins/lang
+wk.add({
+  { "<leader>l", group = "lang", mode = { "n", "v" } },
+})
+
+-- dap
+wk.add({
+  { "<leader>ld", group = "dap", mode = { "n", "v" } },
+  map("n", "<leader>ldc", dap.continue, { desc = "Continue" }),
+  map("n", "<leader>ldC", dap.run_to_cursor, { desc = "Run to Cursor" }),
+  map("n", "<leader>ldb", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
+  map({ "n", "v" }, "<leader>lde", function() dapui.eval() end, { desc = "Eval" }),
+  map("n", "<leader>df", function() dapui.float_element() end, { desc = "Float Element" }),
+  map({ "n", "v" }, "<leader>ldh", require("dap.ui.widgets").hover, { desc = "Hover" }),
+  map("n", "<leader>ldo", dap.step_over, { desc = "Step Over" }),
+  map("n", "<leader>ldi", dap.step_into, { desc = "Step Into" }),
+  map("n", "<leader>ldO", dap.step_out, { desc = "Step Out" }),
+  map("n", "<leader>ldr", dap.repl.toggle, { desc = "Toggle REPL" }),
+  map("n", "<leader>ldu", function() dapui.toggle() end, { desc = "Toggle UI" }),
+  map("n", "<leader>ld.", dap.close, { desc = "Terminate Session" }),
+})
+
+-- lsp
+wk.add({
+  { "<leader>ll", group = "lsp", mode = { "n", "v" } },
+  map("n", "<leader>llI", ":LspInfo<CR>", { desc = "Lsp Info" }),
+  map("n", "<leader>llL", ":LspLog<CR>", { desc = "Lsp Log" }),
+  map("n", "<leader>llR", ":LspRestart<CR>", { desc = "Lsp Restart" }),
+  map("n", "<leader>lla", buf.code_action, { desc = "Code Action" }),
+  map("v", "<leader>llf", buf.format, { desc = "Format Selection" }),
+  map("n", "<leader>llr", buf.rename, { desc = "Rename Symbol" }),
+  map("n", "<leader>llc", buf.references, { desc = "Show References" }),
+  map("n", "<leader>lld", buf.definition, { desc = "Go to Definition" }),
+  map("n", "<leader>llD", buf.declaration, { desc = "Go to Declaration" }),
+  map("n", "<leader>llt", buf.type_definition, { desc = "Go to Type Definition" }),
+  map("n", "<leader>lli", buf.implementation, { desc = "Go to Implementation" }),
+  map("n", "<leader>llh", buf.hover, { desc = "Hover Documentation" }),
+  map("n", "<leader>lls", buf.signature_help, { desc = "Signature Help" }),
+})
+
+-- ruby
+wk.add({
+  { "<leader>lr", group = "ruby", icon = "", mode = { "n", "v" } },
+  map("n", "<leader>lri", ruby.bundle_install, { desc = "Bundle Install" }),
+  map("n", "<leader>lru", ruby.bundle_update, { desc = "Bundle Update" }),
+  map("n", "<leader>lry", ruby.rails_about, { desc = "Rails About" }),
+  map("n", "<leader>lrc", ruby.rails_console, { desc = "Rails Console" }),
+  map("n", "<leader>lrd", ruby.rails_console_db, { desc = "Rails DB Console" }),
+  map("n", "<leader>lrs", ruby.rails_server, { desc = "Rails Server" }),
+  map("n", "<leader>lrt", ruby.rails_test, { desc = "Rails Test" }),
+})
+
+-- swift
+wk.add({
+  { "<leader>ls", group = "swift", icon = "󰛥", mode = { "n", "v" } },
+  map("n", "<leader>lsb", swift.build, { desc = "Swift Build" }),
+  map("n", "<leader>lsR", swift.repl, { desc = "Swift REPL" }),
+  map("n", "<leader>lsr", swift.run, { desc = "Swift Run" }),
+  map("n", "<leader>lst", swift.test, { desc = "Swift Test" }),
+  map("n", "<leader>lsc", swift.package_clean, { desc = "Swift Package Clean" }),
+  map("n", "<leader>lsu", swift.package_update, { desc = "Swift Package Update" }),
+})
+
+-- tasks
+wk.add({
+  { "<leader>lt", group = "tasks", icon = "", mode = { "n", "v" } },
+  map("n", "<leader>ltb", "<cmd>TaskBuild<CR>", { desc = "Build" }),
+  map("n", "<leader>ltt", "<cmd>TaskTest<CR>", { desc = "Test" }),
+  map("n", "<leader>ltl", "<cmd>TaskLint<CR>", { desc = "Lint" }),
+  map("n", "<leader>ltf", "<cmd>TaskFormat<CR>", { desc = "Format" }),
+})
+
+-- plugins/lang/util/xcode
 wk.add({
   map("n", "<leader>X", "<cmd>XcodebuildPicker<cr>", { desc = "Toggle Xcodebuild" }),
 
-  { "<leader>mx", group = "xcode", mode = { "n", "v" } },
-  map("n", "<leader>mx.", "<cmd>XcodeOpen<cr>", { desc = "Open in Xcode" }),
-  map("n", "<leader>mxa", "<cmd>XcodebuildPicker<cr>", { desc = "All Xcodebuild Actions" }),
-  map("n", "<leader>mxb", "<cmd>XcodebuildBuild<cr>", { desc = "Build Project" }),
-  map("n", "<leader>mxd", xcdap.build_and_debug, { desc = "Debug Project" }),
-  map("n", "<leader>mxr", "<cmd>XcodebuildBuildRun<cr>", { desc = "Run Project" }),
-  map("n", "<leader>mxs", "<cmd>XcodebuildSelectDevice<cr>", { desc = "Select Device" }),
-  map("n", "<leader>mxq", xcdap.terminate_session, { desc = "Stop Running" }),
-  map("n", "<leader>mxx", "<cmd>XcodebuildToggleLogs<cr>", { desc = "Xcodebuild Logs" }),
+  { "<leader>lx", group = "xcode", mode = { "n", "v" } },
+  map("n", "<leader>lx.", "<cmd>XcodeOpen<cr>", { desc = "Open in Xcode" }),
+  map("n", "<leader>lxa", "<cmd>XcodebuildPicker<cr>", { desc = "All Xcodebuild Actions" }),
+  map("n", "<leader>lxb", "<cmd>XcodebuildBuild<cr>", { desc = "Build Project" }),
+  map("n", "<leader>lxd", xcdap.build_and_debug, { desc = "Debug Project" }),
+  map("n", "<leader>lxr", "<cmd>XcodebuildBuildRun<cr>", { desc = "Run Project" }),
+  map("n", "<leader>lxs", "<cmd>XcodebuildSelectDevice<cr>", { desc = "Select Device" }),
+  map("n", "<leader>lxq", xcdap.terminate_session, { desc = "Stop Running" }),
+  map("n", "<leader>lxx", "<cmd>XcodebuildToggleLogs<cr>", { desc = "Xcodebuild Logs" }),
 
-  { "<leader>mxl", group = "lldb", mode = { "n", "v" } },
-  map("n", "<leader>mxlb", xcdap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
-  map("n", "<leader>mxlB", xcdap.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" }),
-  map("n", "<leader>mxld", xcdap.build_and_debug, { desc = "Build & Debug" }),
-  map("n", "<leader>mxlr", xcdap.debug_without_build, { desc = "Debug Without Building" }),
-  map("n", "<leader>mxlt", xcdap.debug_tests, { desc = "Debug Tests" }),
-  map("n", "<leader>mxlT", xcdap.debug_class_tests, { desc = "Debug Class Tests" }),
-  map("n", "<leader>mxl.", xcdap.terminate_session, { desc = "Terminate Debugger" }),
+  { "<leader>lxl", group = "lldb", mode = { "n", "v" } },
+  map("n", "<leader>lxlb", xcdap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
+  map("n", "<leader>lxlB", xcdap.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" }),
+  map("n", "<leader>lxld", xcdap.build_and_debug, { desc = "Build & Debug" }),
+  map("n", "<leader>lxlr", xcdap.debug_without_build, { desc = "Debug Without Building" }),
+  map("n", "<leader>lxlt", xcdap.debug_tests, { desc = "Debug Tests" }),
+  map("n", "<leader>lxlT", xcdap.debug_class_tests, { desc = "Debug Class Tests" }),
+  map("n", "<leader>lxl.", xcdap.terminate_session, { desc = "Terminate Debugger" }),
 
-  { "<leader>mxt", group = "tests", mode = { "n", "v" } },
-  map("n", "<leader>mxtb", "<cmd>XcodebuildBuildForTesting<cr>", { desc = "Build For Testing" }),
-  map("n", "<leader>mxtr", "<cmd>XcodebuildTest<cr>", { desc = "Run Tests" }),
-  map("v", "<leader>mxts", "<cmd>XcodebuildTestSelected<cr>", { desc = "Run Selected Tests" }),
-  map("n", "<leader>mxtn", "<cmd>XcodebuildTestClass<cr>", { desc = "Run Current Test Class" }),
-  map("n", "<leader>mxtl", "<cmd>XcodebuildTestRepeat<cr>", { desc = "Repeat Last Test Run" }),
-  map("n", "<leader>mxtc", "<cmd>XcodebuildToggleCodeCoverage<cr>", { desc = "Toggle Code Coverage" }),
-  map("n", "<leader>mxtC", "<cmd>XcodebuildShowCodeCoverageReport<cr>", { desc = "Show Code Coverage Report" }),
-  map("n", "<leader>mxte", "<cmd>XcodebuildTestExplorerToggle<cr>", { desc = "Toggle Test Explorer" }),
+  { "<leader>lxt", group = "tests", mode = { "n", "v" } },
+  map("n", "<leader>lxtb", "<cmd>XcodebuildBuildForTesting<cr>", { desc = "Build For Testing" }),
+  map("n", "<leader>lxtr", "<cmd>XcodebuildTest<cr>", { desc = "Run Tests" }),
+  map("v", "<leader>lxts", "<cmd>XcodebuildTestSelected<cr>", { desc = "Run Selected Tests" }),
+  map("n", "<leader>lxtn", "<cmd>XcodebuildTestClass<cr>", { desc = "Run Current Test Class" }),
+  map("n", "<leader>lxtl", "<cmd>XcodebuildTestRepeat<cr>", { desc = "Repeat Last Test Run" }),
+  map("n", "<leader>lxtc", "<cmd>XcodebuildToggleCodeCoverage<cr>", { desc = "Toggle Code Coverage" }),
+  map("n", "<leader>lxtC", "<cmd>XcodebuildShowCodeCoverageReport<cr>", { desc = "Show Code Coverage Report" }),
+  map("n", "<leader>lxte", "<cmd>XcodebuildTestExplorerToggle<cr>", { desc = "Toggle Test Explorer" }),
 
-{ "<leader>mxo", group = "other", mode = { "n", "v" } },
-  map("n", "<leader>mxop", "<cd>XcodebuildPreviewGenerateAndShow<cr>", { desc = "Generate Preview" }),
-  map("n", "<leader>mxo<cr>", "<cmd>XcodebuildPreviewToggle<cr>", { desc = "Toggle Preview" }),
-  map("n", "<leader>mxoa", "<cmd>XcodebuildCodeActions<cr>", { desc = "Show Code Actions" }),
-  map("n", "<leader>mxos", "<cmd>XcodebuildFailingSnapshots<cr>", { desc = "Show Failing Snapshots" }),
-  map("n", "<leader>mxop", "<cmd>XcodebuildProjectManager<cr>", { desc = "Show Project Manager Actions" }),
-  map("n", "<leader>mxoq", "<cmd>XcodebuildQuickfixLine<cr>", { desc = "Quickfix Line" }),
+{ "<leader>lxo", group = "other", mode = { "n", "v" } },
+  map("n", "<leader>lxop", "<cd>XcodebuildPreviewGenerateAndShow<cr>", { desc = "Generate Preview" }),
+  map("n", "<leader>lxo<cr>", "<cmd>XcodebuildPreviewToggle<cr>", { desc = "Toggle Preview" }),
+  map("n", "<leader>lxoa", "<cmd>XcodebuildCodeActions<cr>", { desc = "Show Code Actions" }),
+  map("n", "<leader>lxos", "<cmd>XcodebuildFailingSnapshots<cr>", { desc = "Show Failing Snapshots" }),
+  map("n", "<leader>lxop", "<cmd>XcodebuildProjectManager<cr>", { desc = "Show Project Manager Actions" }),
+  map("n", "<leader>lxoq", "<cmd>XcodebuildQuickfixLine<cr>", { desc = "Quickfix Line" }),
 })
 
 -- move noice from search (s) into diagnostics (x)
-my.remove_noice_keymaps()
+remove_noice_keymaps()
 wk.add({
   { "<leader>xn", group = "noice", mode = { "n", "v" } },
   map("n", "<leader>xnl", function() noice.cmd("last") end, { desc = "Noice Last Message" }),

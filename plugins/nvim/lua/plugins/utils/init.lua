@@ -89,7 +89,7 @@ return {
       opts.picker.sources = opts.picker.sources or {}
       opts.picker.sources.explorer = vim.tbl_deep_extend("force", opts.picker.sources.explorer or {}, {
         on_show = function()
-          require("config.my").close_left_terminal()
+          require("plugins.utils.terms").close_left_terminal()
         end,
       })
       return opts

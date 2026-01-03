@@ -20,11 +20,11 @@ M.test = function()
   term("swift test")
 end
 
-M.clean = function()
+M.package_clean = function()
   term("swift package clean")
 end
 
-M.update = function()
+M.package_update = function()
   term("swift package update")
 end
 

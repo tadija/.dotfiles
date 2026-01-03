@@ -1,15 +1,8 @@
 local snacks = require("snacks")
-local del = vim.keymap.del
 
 local M = {}
 
--- quick log
-_G.dump = function(...)
-  print(vim.inspect(...))
-end
-
 function M.close_explorer()
-  -- close snacks explorer
   for _, explorer in ipairs(snacks.picker.get({ source = "explorer" })) do
     explorer:close()
   end
@@ -24,7 +17,6 @@ function M.close_left_terminal()
   end
 end
 
--- normalized path to current buffer
 function M.current_buf_dir()
   -- get buffer
   local win = vim.fn.win_getid(vim.fn.winnr("#"))
@@ -50,20 +42,17 @@ function M.current_buf_dir()
   return dir
 end
 
-function M.remove_lazy_keymaps()
-  -- Lazy, LazyChangelog, Keywordprg
-  del("n", "<leader>l")
-  del("n", "<leader>L")
-  del("n", "<leader>K")
+function M.toggle_left()
+  M.close_explorer()
+  snacks.terminal.toggle(nil, { count = 101, cwd = M.current_buf_dir(), win = { position = "left" } })
 end
 
-function M.remove_noice_keymaps()
-  del("n", "<leader>snl")
-  del("n", "<leader>snh")
-  del("n", "<leader>sna")
-  del("n", "<leader>snd")
-  del("n", "<leader>snt")
-  del("n", "<leader>sn")
+function M.toggle_float()
+  snacks.terminal.toggle(nil, { count = 102, cwd = vim.loop.cwd(), win = { position = "float" } })
+end
+
+function M.toggle_right()
+  snacks.terminal.toggle(nil, { count = 103, cwd = vim.loop.cwd(), win = { position = "right" } })
 end
 
 return M

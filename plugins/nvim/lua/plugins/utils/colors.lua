@@ -32,7 +32,7 @@ return {
   { "dracula/vim", name = "dracula" },
   { "ellisonleao/gruvbox.nvim" },
   { "folke/tokyonight.nvim" },
-  { "marko-cerovac/material.nvim" },
+  { "luisiacc/gruvbox-baby" },
   { "mhartington/oceanic-next" },
   { "nyoom-engineering/oxocarbon.nvim" },
   { "olimorris/onedarkpro.nvim" },
@@ -41,27 +41,11 @@ return {
   { "rebelot/kanagawa.nvim" },
   { "ribru17/bamboo.nvim" },
   { "rose-pine/neovim", name = "rose-pine" },
-  { "sainnhe/edge" },
   { "sainnhe/everforest" },
   { "sainnhe/sonokai" },
   { "savq/melange-nvim" },
   { "scottmckendry/cyberdream.nvim" },
   { "srcery-colors/srcery-vim" },
-
-  -- override tokyonight highlights
-  {
-    "folke/tokyonight.nvim",
-    opts = {
-      on_highlights = function(hl, c)
-        hl.BlinkCmpGhostText = {
-          fg = c.orange,
-        }
-        hl.WinSeparator = {
-          fg = c.orange,
-        }
-      end,
-    },
-  },
 
   -- persist colorscheme per project
   {
@@ -69,6 +53,12 @@ return {
     lazy = false,
 
     config = function()
+      local function set_theme_overrides()
+        local orange = "#ff8800"
+        vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = orange })
+        vim.api.nvim_set_hl(0, "WinSeparator", { fg = orange })
+      end
+
       local util = require("lazyvim.util")
       local root = util.root.get()
       local dir = root .. "/.nvim"
@@ -85,6 +75,7 @@ return {
       -- save
       vim.api.nvim_create_autocmd("ColorScheme", {
         callback = function()
+          set_theme_overrides()
           local name = vim.g.colors_name
           if name and #name > 0 then
             if vim.fn.isdirectory(dir) == 0 then
@@ -94,6 +85,8 @@ return {
           end
         end,
       })
+
+      set_theme_overrides()
     end,
   },
 }
