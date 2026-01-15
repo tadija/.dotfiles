@@ -1,19 +1,6 @@
 # https://github.com/tadija/.dotfiles
 # my.sh
 
-# random shortcuts
-
-alias ssh-reload="cd ~/.ssh && fd -e pub -x ssh-add --apple-use-keychain {.} && cd -"
-
-alias bb="open -a bbedit"
-alias lv="nvim"
-
-function greenfield() {
-  curl -L "tadija.net/swift-greenfield" | bash -s "$1"
-}
-
-# machine setup
-
 function my-radio() {
   echo "configuring radio..."
   cd ~/Downloads
@@ -35,6 +22,17 @@ function my-dotfiles() {
 function my-cloud() {
   ln -s ~/Library/Mobile\ Documents/com~apple~CloudDocs ~/Cloud
   la ~/Cloud
+}
+
+function my-defaults {
+  # disable cursor blinking globally
+  defaults write -g NSTextInsertionPointBlinkPeriod -float 60000
+  # enable simulator beside Xcode in full screen mode
+  defaults write com.apple.iphonesimulator AllowFullscreenMode -bool YES
+  # show number of remaining files when indexing a project in xcode
+  defaults write com.apple.dtXcode IDEIndexerActivityShowNumericProgress -bool true
+  # disable creating .DS_Store file on network volumes
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 }
 
 function my-ssh() {
@@ -70,8 +68,6 @@ function my-nvim() {
 }
 
 function my-plugins() {
-  setup-defaults
-  echo ""
   setup-fzf
   echo ""
   setup-rbenv
@@ -121,7 +117,12 @@ function my-xcode() {
   # import accounts for code signing
 }
 
+function my-greenfield() {
+  curl -L "tadija.net/swift-greenfield" | bash -s "$1"
+}
+
 function my-homebridge() {
   sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
   sudo hb-service install
 }
+

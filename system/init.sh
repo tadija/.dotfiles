@@ -1,10 +1,10 @@
 # https://github.com/tadija/.dotfiles
 # init.sh
 
-source $df/custom/config.sh
 source $df/system/commands.sh
+source $df/custom/config.sh
 
-for plugin in $dfplugins; do
+for plugin in $df_plugins; do
   local file=$(df-find $plugin)
   if [ -e "$file" ]; then
     source $file
@@ -12,3 +12,4 @@ for plugin in $dfplugins; do
 done
 
 [ -f ~/.env.local ] && source ~/.env.local
+

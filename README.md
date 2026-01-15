@@ -1,80 +1,76 @@
 # .dotfiles
 
-**From vanilla to personalized macOS in less then 30 minutes**
+**from vanilla system to infinity and beyond in no time**
 
-> If this can help you too, then great, feel free to customize it and use for your own needs.
+- macOS: install and run Xcode, then start Terminal app and follow instructions below
+- Linux / WSL: change shell to zsh -> `chsh -s $(which zsh)`, then follow instructions below
 
-Install and run Xcode then start Terminal app and follow instructions:
+> feel free to fork and customize for yourself
 
-## Step 1 [get ready]
+## Step 1 [ready]
 
 - Clone this repo into your home directory
 
 	``` sh
-	$ git clone https://github.com/tadija/.dotfiles.git ~/.dotfiles
+	cd && git clone https://github.com/tadija/.dotfiles.git
 	```
 
-- Run this [setup script](system/setup.sh) which will make your new [.shell_file](.shell_file)
+- Run [the setup script](system/setup.sh) to make [the shell file](.shell) and setup `dot_files` defined in [the config file](custom/config.sh)
 
 	``` sh
-	$ . ~/.dotfiles/system/setup.sh
+	. ~/.dotfiles/system/setup.sh deploy
 	```
+	> replace `deploy` with `destroy` to uninstall
 	
 - Play some music while doing all of this? (optional)
 
 	``` sh
-	$ my-radio
+	my-radio
 	```
-
-- Configure [AE theme](themes/AE.terminal) for Terminal? (optional)
-
-	``` sh
-	$ df-terminal AE
-	```
-	
-	*after this step run `rm ~/.zcompdump` and restart Terminal in order to fix the error:*
-	`compinit:482: bad math expression: operand expected at end of string`
 
 ## Step 2 [set]
 
-- Configure and save [your config file](custom/config.sh)
+- Configure and save [the config file](custom/config.sh)
 
 	``` sh
-	$ df-edit config
+	df-edit config
 	```
 
 - Reload shell
 
 	``` sh
-	$ df-reload
+	df-reload
 	```
 
 - Configure global git user (optional)
 
 	``` sh
-	$ git-user my --global
+	df-git my --global
 	```
 
 ## Step 3 [go]
 
-- Install / Update / Upgrade [Homebrew](http://brew.sh)
+- Configure and save [the install file](custom/install.sh)
 
 	``` sh
-	$ df-homebrew
+	df-edit install
 	```
 
-- Install all the things from [your config file](custom/config.sh)
+- Install all the things
 
 	``` sh
-	$ df-install
+	df-install
 	```
 	
 - Reload shell
 
 	``` sh
-	$ df-reload
+	df-reload
 	```
+
+boom! that's it!
 
 ---
 
 `done for fun`
+

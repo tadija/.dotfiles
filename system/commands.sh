@@ -1,6 +1,9 @@
 # https://github.com/tadija/.dotfiles
 # commands.sh
 
+source $df/custom/config.sh
+source $df/custom/install.sh
+
 function df-reload() {
   source ~/.zshrc
   echo "platform: $OS"
@@ -53,6 +56,15 @@ function df-update() {
   df-reload
 }
 
+function df-destroy() {
+  . $df/system/setup.sh destroy
+}
+function df-deploy() {
+  . $df/system/setup.sh deploy
+}
+
+# usage: df-terminal AE
+# afterwards: `rm ~/.zcompdump` and restart Terminal
 function df-terminal() {
   local theme="$1"
   local file=$df/themes/$theme.terminal
@@ -91,22 +103,42 @@ function df-install() {
   df-homebrew
 
   echo ""
-  echo "[brew] installing quicklook plugins..."
-  brew install --cask ${qlplugins[@]}
-  # remove the quarantine attribute (see: https://github.com/sindresorhus/quick-look-plugins)
-  xattr -d -r com.apple.quarantine ~/Library/QuickLook
-
-  echo ""
   echo "[brew] installing command line tools..."
-  brew install ${cli[@]}
+  brew install ${cli_tools[@]} --force
 
   echo ""
   echo "[brew] installing apps..."
-  brew install --cask --appdir=$apps_installation_path ${apps[@]} --force
+  brew install --cask --appdir=$apps_path ${apps[@]} --force
 
   echo ""
   echo -e "[brew] cleanup...\n"
 
   brew cleanup
+}
+
+function df-git-usr() {
+  echo "git user: $(git config user.name) | $(git config user.email)"
+}
+
+function df-git() {
+  value=${df_git[$1]}
+  name=$(echo $value | cut -d ';' -f1)
+  email=$(echo $value | cut -d ';' -f2)
+
+  if [[ -z $name || -z $email ]]; then
+    echo "name or email not found in git_user[$1]"
+  else
+    if [[ $2 == "--global" ]]; then
+      echo "configuring global git user..."
+      git config --global user.name $name
+      git config --global user.email $email
+    else
+      echo "configuring local git user..."
+      git config user.name $name
+      git config user.email $email
+    fi
+    # print current git user after change
+    df-git-usr
+  fi
 }
 

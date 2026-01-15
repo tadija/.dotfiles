@@ -12,11 +12,7 @@ function detect-platform() {
 }
 
 function zsh-init() {
-  local compdump_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-  local compdump_file="$compdump_dir/.zcompdump-${HOST:-$(hostname)}"
-
-  mkdir -p "$compdump_dir"
-  autoload -Uz compinit && compinit -C -d "$compdump_file"
+  autoload -Uz compinit && compinit -C
   autoload -U colors && colors
 }
 
