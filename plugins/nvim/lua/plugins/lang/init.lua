@@ -1,7 +1,6 @@
 local cmp = require("plugins.lang.core.cmp")
 local dap = require("plugins.lang.core.dap")
 local lsp = require("plugins.lang.core.lsp")
-local servers = require("plugins.lang.core.servers")
 local syntax = require("plugins.lang.core.syntax")
 local utils =  require("plugins.lang.util")
 local tasks = require("plugins.lang.task")
@@ -15,6 +14,10 @@ local function lsp_spec()
       vim.diagnostic.enable(false)
     end,
     opts = function(_, opts)
+      local ok, servers = pcall(require, "plugins.lang.core.servers")
+      if not ok then
+        return opts
+      end
       opts.servers = opts.servers or {}
       opts.inlay_hints = opts.inlay_hints or {}
       opts.inlay_hints.enabled = false
@@ -26,7 +29,7 @@ local function lsp_spec()
           server_opts.on_attach = function(client, bufnr)
             lsp.on_attach(client, bufnr)
           end
-          server_opts.capabilities = lsp.capabilities
+          server_opts.capabilities = lsp.get_capabilities()
           require("lspconfig")[server].setup(server_opts)
         end,
       }

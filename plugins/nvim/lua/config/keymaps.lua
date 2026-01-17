@@ -2,8 +2,6 @@
 -- Default keymaps that are always set:
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 
-local dap = require("dap")
-local dapui = require("dapui")
 local cc = require("codecompanion")
 local ai_utils = require("plugins.ai.utils")
 local noice = require("noice")
@@ -11,7 +9,6 @@ local snacks = require("snacks")
 local ruby = require("plugins.lang.ruby")
 local swift = require("plugins.lang.swift")
 local toggles = require("plugins.utils.toggles")
-local xcdap = require("xcodebuild.integrations.dap")
 local util = require("lazyvim.util")
 local wk = require("which-key")
 
@@ -116,21 +113,32 @@ wk.add({
 })
 
 -- dap
-wk.add({
-  { "<leader>ld", group = "dap", mode = { "n", "v" } },
-  map("n", "<leader>ldc", dap.continue, { desc = "Continue" }),
-  map("n", "<leader>ldC", dap.run_to_cursor, { desc = "Run to Cursor" }),
-  map("n", "<leader>ldb", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
-  map({ "n", "v" }, "<leader>lde", function() dapui.eval() end, { desc = "Eval" }),
-  map("n", "<leader>df", function() dapui.float_element() end, { desc = "Float Element" }),
-  map({ "n", "v" }, "<leader>ldh", require("dap.ui.widgets").hover, { desc = "Hover" }),
-  map("n", "<leader>ldo", dap.step_over, { desc = "Step Over" }),
-  map("n", "<leader>ldi", dap.step_into, { desc = "Step Into" }),
-  map("n", "<leader>ldO", dap.step_out, { desc = "Step Out" }),
-  map("n", "<leader>ldr", dap.repl.toggle, { desc = "Toggle REPL" }),
-  map("n", "<leader>ldu", function() dapui.toggle() end, { desc = "Toggle UI" }),
-  map("n", "<leader>ld.", dap.close, { desc = "Terminate Session" }),
-})
+util.on_load("nvim-dap", function()
+  local dap = require("dap")
+  local dapui_ok, dapui = pcall(require, "dapui")
+  local dap_widgets = require("dap.ui.widgets")
+
+  wk.add({
+    { "<leader>ld", group = "dap", mode = { "n", "v" } },
+    map("n", "<leader>ldc", dap.continue, { desc = "Continue" }),
+    map("n", "<leader>ldC", dap.run_to_cursor, { desc = "Run to Cursor" }),
+    map("n", "<leader>ldb", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
+    map({ "n", "v" }, "<leader>ldh", dap_widgets.hover, { desc = "Hover" }),
+    map("n", "<leader>ldo", dap.step_over, { desc = "Step Over" }),
+    map("n", "<leader>ldi", dap.step_into, { desc = "Step Into" }),
+    map("n", "<leader>ldO", dap.step_out, { desc = "Step Out" }),
+    map("n", "<leader>ldr", dap.repl.toggle, { desc = "Toggle REPL" }),
+    map("n", "<leader>ld.", dap.close, { desc = "Terminate Session" }),
+  })
+
+  if dapui_ok then
+    wk.add({
+      map({ "n", "v" }, "<leader>lde", function() dapui.eval() end, { desc = "Eval" }),
+      map("n", "<leader>df", function() dapui.float_element() end, { desc = "Float Element" }),
+      map("n", "<leader>ldu", function() dapui.toggle() end, { desc = "Toggle UI" }),
+    })
+  end
+end)
 
 -- lsp
 wk.add({
@@ -190,20 +198,9 @@ wk.add({
   map("n", "<leader>lx.", "<cmd>XcodeOpen<cr>", { desc = "Open in Xcode" }),
   map("n", "<leader>lxa", "<cmd>XcodebuildPicker<cr>", { desc = "All Xcodebuild Actions" }),
   map("n", "<leader>lxb", "<cmd>XcodebuildBuild<cr>", { desc = "Build Project" }),
-  map("n", "<leader>lxd", xcdap.build_and_debug, { desc = "Debug Project" }),
   map("n", "<leader>lxr", "<cmd>XcodebuildBuildRun<cr>", { desc = "Run Project" }),
   map("n", "<leader>lxs", "<cmd>XcodebuildSelectDevice<cr>", { desc = "Select Device" }),
-  map("n", "<leader>lxq", xcdap.terminate_session, { desc = "Stop Running" }),
   map("n", "<leader>lxx", "<cmd>XcodebuildToggleLogs<cr>", { desc = "Xcodebuild Logs" }),
-
-  { "<leader>lxl", group = "lldb", mode = { "n", "v" } },
-  map("n", "<leader>lxlb", xcdap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
-  map("n", "<leader>lxlB", xcdap.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" }),
-  map("n", "<leader>lxld", xcdap.build_and_debug, { desc = "Build & Debug" }),
-  map("n", "<leader>lxlr", xcdap.debug_without_build, { desc = "Debug Without Building" }),
-  map("n", "<leader>lxlt", xcdap.debug_tests, { desc = "Debug Tests" }),
-  map("n", "<leader>lxlT", xcdap.debug_class_tests, { desc = "Debug Class Tests" }),
-  map("n", "<leader>lxl.", xcdap.terminate_session, { desc = "Terminate Debugger" }),
 
   { "<leader>lxt", group = "tests", mode = { "n", "v" } },
   map("n", "<leader>lxtb", "<cmd>XcodebuildBuildForTesting<cr>", { desc = "Build For Testing" }),
@@ -215,7 +212,7 @@ wk.add({
   map("n", "<leader>lxtC", "<cmd>XcodebuildShowCodeCoverageReport<cr>", { desc = "Show Code Coverage Report" }),
   map("n", "<leader>lxte", "<cmd>XcodebuildTestExplorerToggle<cr>", { desc = "Toggle Test Explorer" }),
 
-{ "<leader>lxo", group = "other", mode = { "n", "v" } },
+  { "<leader>lxo", group = "other", mode = { "n", "v" } },
   map("n", "<leader>lxop", "<cd>XcodebuildPreviewGenerateAndShow<cr>", { desc = "Generate Preview" }),
   map("n", "<leader>lxo<cr>", "<cmd>XcodebuildPreviewToggle<cr>", { desc = "Toggle Preview" }),
   map("n", "<leader>lxoa", "<cmd>XcodebuildCodeActions<cr>", { desc = "Show Code Actions" }),
@@ -223,6 +220,23 @@ wk.add({
   map("n", "<leader>lxop", "<cmd>XcodebuildProjectManager<cr>", { desc = "Show Project Manager Actions" }),
   map("n", "<leader>lxoq", "<cmd>XcodebuildQuickfixLine<cr>", { desc = "Quickfix Line" }),
 })
+
+local xcdap_ok, xcdap = pcall(require, "xcodebuild.integrations.dap")
+if xcdap_ok then
+  wk.add({
+    map("n", "<leader>lxd", xcdap.build_and_debug, { desc = "Debug Project" }),
+    map("n", "<leader>lxq", xcdap.terminate_session, { desc = "Stop Running" }),
+
+    { "<leader>lxl", group = "lldb", mode = { "n", "v" } },
+    map("n", "<leader>lxlb", xcdap.toggle_breakpoint, { desc = "Toggle Breakpoint" }),
+    map("n", "<leader>lxlB", xcdap.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" }),
+    map("n", "<leader>lxld", xcdap.build_and_debug, { desc = "Build & Debug" }),
+    map("n", "<leader>lxlr", xcdap.debug_without_build, { desc = "Debug Without Building" }),
+    map("n", "<leader>lxlt", xcdap.debug_tests, { desc = "Debug Tests" }),
+    map("n", "<leader>lxlT", xcdap.debug_class_tests, { desc = "Debug Class Tests" }),
+    map("n", "<leader>lxl.", xcdap.terminate_session, { desc = "Terminate Debugger" }),
+  })
+end
 
 -- move noice from search (s) into diagnostics (x)
 remove_noice_keymaps()

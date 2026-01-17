@@ -1,12 +1,22 @@
 local M = {}
 
+local function cmp_capabilities()
+  local ok, blink = pcall(require, "blink.cmp")
+  if ok and blink.get_lsp_capabilities then
+    return blink.get_lsp_capabilities()
+  end
+  return {}
+end
+
 -- enable capabilities
-M.capabilities = vim.tbl_deep_extend(
-  "force",
-  {},
-  vim.lsp.protocol.make_client_capabilities(),
-  require("blink.cmp").get_lsp_capabilities()
-)
+M.get_capabilities = function()
+  return vim.tbl_deep_extend(
+    "force",
+    {},
+    vim.lsp.protocol.make_client_capabilities(),
+    cmp_capabilities()
+  )
+end
 
 -- helper command to show current LSP root
 vim.api.nvim_create_user_command("LspRoot", function()

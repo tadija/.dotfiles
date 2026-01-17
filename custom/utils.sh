@@ -24,7 +24,7 @@ function my-cloud() {
   la ~/Cloud
 }
 
-function my-defaults {
+function my-defaults() {
   # disable cursor blinking globally
   defaults write -g NSTextInsertionPointBlinkPeriod -float 60000
   # enable simulator beside Xcode in full screen mode
@@ -33,6 +33,11 @@ function my-defaults {
   defaults write com.apple.dtXcode IDEIndexerActivityShowNumericProgress -bool true
   # disable creating .DS_Store file on network volumes
   defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+}
+
+function my-npm() {
+  npm install -g @zed-industries/codex-acp
+  npm install -g @zed-industries/claude-code-acp
 }
 
 function my-ssh() {
@@ -65,6 +70,24 @@ function my-tmux() {
 function my-nvim() {
   mv ~/.config/nvim ~/.config/nvim-backup
   ln -s ~/.dotfiles/plugins/nvim ~/.config/nvim
+}
+
+function my-nvim-reset() {
+  rm -rf ~/.local/share/nvim 2>/dev/null
+  rm -rf ~/.local/state/nvim 2>/dev/null
+  rm -rf ~/.cache/nvim 2>/dev/null
+}
+
+function my-nvim-backup() {
+  mv ~/.local/share/nvim ~/.local/share/nvim-backup 2>/dev/null
+  mv ~/.local/state/nvim ~/.local/state/nvim-backup 2>/dev/null
+  mv ~/.cache/nvim ~/.cache/nvim-backup 2>/dev/null
+}
+
+function my-nvim-restore() {
+  mv ~/.local/share/nvim-backup ~/.local/share/nvim 2>/dev/null
+  mv ~/.local/state/nvim-backup ~/.local/state/nvim 2>/dev/null
+  mv ~/.cache/nvim-backup ~/.cache/nvim 2>/dev/null
 }
 
 function my-plugins() {

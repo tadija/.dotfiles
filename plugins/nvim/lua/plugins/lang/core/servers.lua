@@ -9,7 +9,7 @@ local M = {
   bashls = {
     cmd = { "bash-language-server", "start" },
     filetypes = { "sh", "bash", "zsh" },
-    root_dir = vim.fs.dirname(vim.fs.find(".git", { path = startpath, upward = true })[1]),
+    root_dir = util.root_pattern(".git"),
   },
 
   -- C / C++

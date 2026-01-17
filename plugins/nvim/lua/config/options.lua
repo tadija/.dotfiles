@@ -4,10 +4,10 @@
 
 vim.g.autoformat = false
 vim.g.lint_autocmds = false
-vim.opt.fileformats = { "unix", "dos" }
-vim.opt.fileformat = "unix"
-vim.opt.fixendofline = true
-vim.opt.endofline = true
+vim.opt_global.fileformats = { "unix", "dos" }
+vim.opt_global.fileformat = "unix"
+vim.opt_global.fixendofline = true
+vim.opt_global.endofline = true
 vim.opt.guicursor:append("a:blinkon0")
 vim.opt.relativenumber = true
 vim.opt.number = true
